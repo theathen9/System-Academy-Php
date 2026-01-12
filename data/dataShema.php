@@ -5,14 +5,14 @@ $infoShemaData=[
     ["email"=>"info@empowermentacademy.com"],
     ["address"=>"36, Siem Reap, Siem Reap"],
     ["phone"=>"095355521"],
-    ["image"=>"/system-management/src/assets/icon.png"]
+    ["image"=>"/src/assets/icon.png"]
 ];
 $staticShemaData=[
     // ===== Dashboard =====
     [
         "title"  => "Dashboard",              // Menu title
         "icon"   => "bi bi-speedometer2",     // Bootstrap icon
-        "link"   => "/system-management/admin/dashboard.php",           // Page link
+        "link"   => "/admin/dashboard.php",           // Page link
         "active" => true                      // Mark as active
     ],
 
@@ -25,18 +25,18 @@ $staticShemaData=[
             // Submenu item
             [
                 "title"  => "Employees",
-                "link"   => "/system-management/admin/institute/employees.php",
+                "link"   => "/admin/institute/employees.php",
                 "active" => false              // Active submenu item
             ],
             [
                 "title" => "Teachers",
-                "link"  => "/system-management/admin/institute/teacher.php",
+                "link"  => "/admin/institute/teacher.php",
                 "active" => false              // Active submenu item
 
             ],
             [
                 "title" => "Students",
-                "link"  => "/system-management/admin/institute/student.php",
+                "link"  => "/admin/institute/student.php",
                 "active" => false              // Active submenu item
             ]
         ],
