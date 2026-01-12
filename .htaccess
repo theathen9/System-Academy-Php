@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# -----------------------
+# Dashboard shortcut
+# /systemmanagement/dashboard
+# -----------------------
+RewriteRule ^dashboard/?$ admin/dashboard.php [L]
+
+# -----------------------
+# Admin routing
+# /systemmanagement/admin/xxx → admin/xxx.php
+# -----------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^admin/(.+)$ admin/$1.php [L]
+
+# -----------------------
+# Auth routing
+# -----------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^auth/(.+)$ auth/$1.php [L]
+
+# -----------------------
+# Teacher routing
+# -----------------------
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^teacher/(.+)$ teacher/$1.php [L]

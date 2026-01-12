@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 $infoShemaData=[
     ["name"=>"Empowerment Education English One"],
     ["email"=>"info@empowermentacademy.com"],
@@ -55,6 +56,69 @@ $staticShemaData=[
             ]
         ],
         "active" => false                      // Mark as active
+=======
+// ./data/dataShema.php
+
+$infoShemaData = [
+    ["name"    => "Empowerment Education English One"],
+    ["email"   => "info@empowermentacademy.com"],
+    ["address" => "36, Siem Reap, Siem Reap"],
+    ["phone"   => "095355521"],
+    ["image"   => "/systemmanagement/src/assets/icon.png"]
+];
+
+$staticShemaData = [
+
+    // ===== Dashboard =====
+    [
+        "title"  => "Dashboard",
+        "icon"   => "bi bi-speedometer2",
+        "link"   => "/systemmanagement/dashboard",
+        "active" => true
+    ],
+
+    // ===== Institute =====
+    [
+        "title" => "Institute",
+        "submenu_id" => "instituteSubmenu",
+        "submenu" => [
+            [
+                "title"  => "Employees",
+                "link"   => "/systemmanagement/admin/institute/employees",
+                "active" => false
+            ],
+            [
+                "title"  => "Department",
+                "link"   => "/systemmanagement/admin/institute/department",
+                "active" => false
+            ],
+            [
+                "title"  => "Teachers",
+                "link"   => "/systemmanagement/admin/institute/teacher",
+                "active" => false
+            ],
+            [
+                "title"  => "Students",
+                "link"   => "/systemmanagement/admin/institute/student",
+                "active" => false
+            ]
+        ],
+        "active" => false
+    ],
+
+    // ===== Enrollment =====
+    [
+        "title" => "Enrollment",
+        "submenu_id" => "enrollmentSubmenu",
+        "submenu" => [
+            [
+                "title"  => "Enrollment",
+                "link"   => "/systemmanagement/admin/enrollment/enrollment",
+                "active" => false
+            ]
+        ],
+        "active" => false
+>>>>>>> 512c3b3 (first commit)
     ],
 
     // ===== Attendance =====
@@ -62,8 +126,19 @@ $staticShemaData=[
         "title" => "Attendance",
         "submenu_id" => "attendanceSubmenu",
         "submenu" => [
+<<<<<<< HEAD
             ["title" => "Dashboard", "link" => "./Dashboard.php"],
             ["title" => "Attendance", "link" => "#"]
+=======
+            [
+                "title" => "Dashboard",
+                "link"  => "/systemmanagement/teacher/attendent"
+            ],
+            [
+                "title" => "Attendance",
+                "link"  => "#"
+            ]
+>>>>>>> 512c3b3 (first commit)
         ]
     ],
 
@@ -95,4 +170,8 @@ $staticShemaData=[
         "title" => "Accounts",
         "link"  => "#"
     ]
+<<<<<<< HEAD
 ];
+=======
+];
+>>>>>>> 512c3b3 (first commit)
