@@ -12,7 +12,7 @@ $staticShemaData=[
     [
         "title"  => "Dashboard",              // Menu title
         "icon"   => "bi bi-speedometer2",     // Bootstrap icon
-        "link"   => "/admin/dashboard.php",           // Page link
+        "link"   => "/admin/dashboard",           // Page link
         "active" => true                      // Mark as active
     ],
 
@@ -25,7 +25,7 @@ $staticShemaData=[
             // Submenu item
             [
                 "title"  => "Employees",
-                "link"   => "/admin/institute/employees.php",
+                "link"   => "/system-academy.onrender.com/admin/institute/employees",
                 "active" => false              // Active submenu item
             ],
             [
