@@ -25,7 +25,7 @@ $staticShemaData=[
             // Submenu item
             [
                 "title"  => "Employees",
-                "link"   => "/system-academy.onrender.com/admin/institute/employees",
+                "link"   => "/admin/institute/employees",
                 "active" => false              // Active submenu item
             ],
             [
@@ -51,7 +51,7 @@ $staticShemaData=[
             // Submenu item
             [
                 "title"  => "Enrollment",
-                "link"   => "/system-management/admin/enrollment/enrollment.php",
+                "link"   => "/admin/enrollment/enrollment.php",
                 "active" => false              // Active submenu item
             ]
         ],
