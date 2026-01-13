@@ -24,7 +24,7 @@ $staticShemaData = [
         "submenu" => [
             [
                 "title"  => "Employees",
-                "link"   => "./admin/employees",
+                "link"   => "./institute/employees",
                 "active" => false
             ],
             [
