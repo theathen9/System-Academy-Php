@@ -24,22 +24,22 @@ $staticShemaData = [
         "submenu" => [
             [
                 "title"  => "Employees",
-                "link"   => "./admin/institute/employees",
+                "link"   => "./institute/employees",
                 "active" => false
             ],
             [
                 "title"  => "Department",
-                "link"   => "./admin/institute/department",
+                "link"   => "./institute/department",
                 "active" => false
             ],
             [
                 "title"  => "Teachers",
-                "link"   => "./admin/institute/teacher",
+                "link"   => "./institute/teacher",
                 "active" => false
             ],
             [
                 "title"  => "Students",
-                "link"   => "./admin/institute/student",
+                "link"   => "./institute/student",
                 "active" => false
             ]
         ],
@@ -53,7 +53,7 @@ $staticShemaData = [
         "submenu" => [
             [
                 "title"  => "Enrollment",
-                "link"   => "./admin/enrollment/enrollment",
+                "link"   => "./enrollment/enrollment",
                 "active" => false
             ]
         ],
