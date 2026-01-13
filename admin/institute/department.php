@@ -2,11 +2,8 @@
 include "../../data/dataShema.php";
 $staticShemaData[0]["active"] = false;
 $staticShemaData[1]["active"] = true;
-<<<<<<< HEAD
 $staticShemaData[1]['submenu'][0]['active'] = true;
-=======
 $staticShemaData[1]['submenu'][1]['active'] = true;
->>>>>>> 512c3b3 (first commit)
 
 ?>
 <!DOCTYPE html>
@@ -36,13 +33,10 @@ $staticShemaData[1]['submenu'][1]['active'] = true;
             <div class="d-flex gap-1 mb-4 align-items-center align-self-center">
                 <img src="<?php echo $infoShemaData[4]["image"] ?>" width="60" height="60" alt="logo" class="rounded-circle">
                 <div class="title">
-<<<<<<< HEAD
                     <p class="m-auto">Empowerment <br>Education English One</p>
-=======
                     
                 
                 <p class="m-auto">Empowerment <br>Education English One</p>
->>>>>>> 512c3b3 (first commit)
                 </div>
             </div>
             <ul class="nav flex-column">
@@ -136,11 +130,9 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                 </div>
 
                 <div class="w-100 d-flex mt-3 justify-content-between gap-3 flex-wrap">
-<<<<<<< HEAD
                     <div class="bg-white shadow p-3 rounded">
                         <div class="fw-semibold mb-2">
                             <i class="bi bi-credit-card-fill"></i> Student List
-=======
                     <div class="bg-white shadow px-4 py-3 rounded">
                        <div class="d-flex justify-content-between align-items-center fw-semibold mb-2">
                             <div class="d-flex w-50 align-items-center justify-content-between gap-3 mb-3">
@@ -203,7 +195,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
 
 
                             <!-- nav student lable -->
->>>>>>> 512c3b3 (first commit)
                         </div>
 
                         <!-- SCROLL CONTAINER -->
@@ -211,7 +202,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                             <table class="table text-center table-hover mb-0">
                                 <thead class="head-custom">
                                     <tr class="headLabel">
-<<<<<<< HEAD
                                         <th>ID</th>
                                         <th>Staff Name</th>
                                         <th>Possition</th>
@@ -219,7 +209,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <th>Email</th>
                                         <th>Address</th>
                                         <th>Action</th>
-=======
                                         <th class="col-sm-1">ID</th>
                                         <th>Department Name</th>
                                         <th>Description</th>
@@ -227,24 +216,17 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <th>Status</th>
                                         <th>Action</th>
 
->>>>>>> 512c3b3 (first commit)
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
                                         <td><span class="badge bg-success">Paid</span></td>
                                         <td>Monthly fee</td>
-<<<<<<< HEAD
-=======
                                         <td>Monthly fee</td>
->>>>>>> 512c3b3 (first commit)
                                         <td class="text-nowrap">
                                             <button class="btn btn-sm btn-primary">Edit</button>
                                             <button class="btn btn-sm btn-danger">Delete</button>
@@ -252,10 +234,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         </td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -263,10 +242,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -274,10 +250,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -285,10 +258,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -296,10 +266,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -307,10 +274,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -318,10 +282,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -329,10 +290,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -340,10 +298,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s01</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -351,10 +306,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s02</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -362,10 +314,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s02</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -373,10 +322,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s02</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -384,10 +330,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                     </tr>
                                     <tr>
-<<<<<<< HEAD
                                         <td>s02</td>
-=======
->>>>>>> 512c3b3 (first commit)
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
