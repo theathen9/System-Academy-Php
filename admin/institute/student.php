@@ -3,9 +3,6 @@ include "../../data/dataShema.php";
 $staticShemaData[0]["active"]=false;
 $staticShemaData[1]["active"]=true;
 $staticShemaData[1]['submenu'][2]['active'] = true;
-$staticShemaData[0]["active"] = false;
-$staticShemaData[1]["active"] = true;
-$staticShemaData[1]['submenu'][3]['active'] = true;
 
 ?>
 <!DOCTYPE html>
@@ -16,7 +13,6 @@ $staticShemaData[1]['submenu'][3]['active'] = true;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Empowerment Education English One</title>
     <link rel="icon" type="image/png" href="<?php echo $infoShemaData[4]["image"] ?>" >
-    <link rel="icon" type="image/png" href="<?php echo $infoShemaData[4]["image"] ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -180,80 +176,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
     </div>
 </div>
 
-                <div class="w-100 d-flex mt-3 justify-content-between gap-3 flex-wrap">
-                    <div class="bg-white shadow px-4 py-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center fw-semibold mb-2">
-                            <div class="d-flex w-50 align-items-center justify-content-between gap-3 mb-3">
-                                <div class="fw-semibold">
-                                    <i class="bi bi-credit-card-fill me-1"></i>
-                                    Students List
-                                </div>
-
-                                <div class="w-75">
-                                    <input type="text"
-                                        class="form-control"
-                                        placeholder="Search students...">
-                                </div>
-                            </div>
-                            <div>
-                                <a href="../enrollment/enrollment.php" class="text-decoration-none">
-                                    <button style="width: 99px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal">
-                                        Enrollment
-                                    </button>
-                                </a>
-
-                                <button style="width: 99px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal">
-                                    Add
-                                </button>
-                            </div>
-
-                            <div class="modal fade" id="studentModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-xl">
-                                    <div class="modal-content">
-
-                                        <form id="studentForm">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Add Student</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Student ID</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label">Student Name</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label">Date Of Birth</label>
-                                                    <input type="date" class="form-control">
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit" class="btn btn-success">
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- nav student lable -->
-                        </div>
-
-
                         <!-- SCROLL CONTAINER -->
                         <div class="table-scroll modelBox ps-3">
                             <table class="table text-center table-hover mb-0">
@@ -277,7 +199,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td>Monthly fee</td>
                                         <td>2025-01-01</td>
                                           <td class="text-nowrap">
-                                        <td class="text-nowrap">
                                             <button class="btn btn-sm btn-primary">Edit</button>
                                             <button class="btn btn-sm btn-danger">Delete</button>
                                             <button class="btn btn-sm btn-info text-white">Detail</button>
@@ -399,7 +320,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
             </div>
         </main>
     </div>
-    <script src="../../script.js"></script>
 </body>
 
 </html>
