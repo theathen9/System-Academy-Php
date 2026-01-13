@@ -28,17 +28,10 @@ $staticShemaData[1]['submenu'][0]['active'] = true;
 
 <body class="container-fluid p-0 ">
     <div class="row g-3">
-<<<<<<< HEAD
         <nav  class="navBar col-12 col-md-3 col-sm-3 col-lg-2 p-3 vh-100 position-sticky top-0 ">
             <div class="d-flex gap-1 mb-4 align-items-center align-self-center">
                 <img src="<?php echo $infoShemaData[4]["image"] ?>" width="60" height="60" alt="logo" class="rounded-circle">
                 <div class="title">
-        <nav class="navBar col-12 col-md-3 col-sm-3 col-lg-2 p-3 vh-100 position-sticky top-0">
-            <div class="d-flex gap-1 mb-4 align-items-center align-self-center">
-                <img src="<?php echo $infoShemaData[4]["image"] ?>" width="60" height="60" alt="logo" class="rounded-circle">
-                <div class="title">
-
-
                     <p class="m-auto">Empowerment <br>Education English One</p>
                 </div>
             </div>
@@ -86,9 +79,7 @@ $staticShemaData[1]['submenu'][0]['active'] = true;
 
         <!-- Main area -->
         <main class="col-12 col-md-6 col-lg-9 col-sm-12 bg-light">
-<<<<<<< HEAD
             <div style="z-index: 555;"
-            <div
                 class="d-flex justify-content-between align-items-center px-2 py-2 bg-white py-md-1 position-sticky top-0 ">
                 <div class="title">Welcome to <?php echo $infoShemaData[0]["name"] ?></div>
 
@@ -142,69 +133,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
 
                             </div>
                             <div class="">s</div>
-                <div class="w-100 d-flex mt-3 justify-content-between gap-3 flex-wrap">
-                    <div class="bg-white shadow px-4 py-3 rounded">
-                        <div class="d-flex justify-content-between align-items-center fw-semibold mb-2">
-                            <div class="d-flex w-50 align-items-center justify-content-between gap-3 mb-3">
-                                <div class="fw-semibold">
-                                    <i class="bi bi-credit-card-fill me-1"></i>
-                                    Employees List
-                                </div>
-
-                                <div class="w-75">
-                                    <input type="text"
-                                        class="form-control"
-                                        placeholder="Search Employees...">
-                                </div>
-                            </div>
-
-                            <button style="width: 99px;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal">
-                                Add
-                            </button>
-                            <div class="modal fade" id="studentModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-xl">
-                                    <div class="modal-content">
-
-                                        <form id="studentForm">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Add Student</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Student ID</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label">Student Name</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label">Date Of Birth</label>
-                                                    <input type="date" class="form-control">
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">
-                                                    Cancel
-                                                </button>
-                                                <button type="submit" class="btn btn-success">
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- nav student lable -->
                         </div>
 
                         <!-- SCROLL CONTAINER -->
@@ -216,13 +144,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <th>Staff Name</th>
                                         <th>Possition</th>
                                         <th>Suject</th>
-                            <table class="table text-center table-hover mb-0">
-                                <thead class="head-custom">
-                                    <tr class="headLabel">
-                                        <th class="col-sm-1">ID</th>
-                                        <th>Name Kh</th>
-                                        <th>Name Eng</th>
-                                        <th>Possition</th>
                                         <th>Phone</th>
                                         <th>Email</th>
                                         <th>Address</th>
@@ -246,16 +167,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                     </tr>
                                     <tr>
                                         <td>s01</td>
-                                        <td>$50</td>
-                                        <td>Monthly fee</td>
-                                        <td>Monthly fee</td>
-                                        <td class="text-nowrap">
-                                            <button class="btn btn-sm btn-primary">Edit</button>
-                                            <button class="btn btn-sm btn-danger">Delete</button>
-                                            <button class="btn btn-sm btn-info text-white">Detail</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <td>ST001</td>
                                         <td>Cash</td>
                                         <td>$50</td>
@@ -361,18 +272,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                 </tbody>
                             </table>
                         </div>
-
-                        </div>
-                        <div class="pages">
-                            <button id="prev"><i class="bi bi-arrow-left"></i></button>
-
-                            <button class="page active">1</button>
-                            <button class="page">2</button>
-                            <button class="page">3</button>
-
-                            <button id="next"><i class="bi bi-arrow-right"></i></button>
-                        </div>
-
                     </div>
                     <div>
                         c
