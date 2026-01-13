@@ -39,7 +39,7 @@ $staticShemaData = [
             ],
             [
                 "title"  => "Students",
-                "link"   => "./institute/student",
+                "link"   => "./student",
                 "active" => false
             ]
         ],
