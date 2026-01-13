@@ -1,14 +1,11 @@
 <?php
 include "../../data/dataShema.php";
-<<<<<<< HEAD
 $staticShemaData[0]["active"]=false;
 $staticShemaData[1]["active"]=true;
 $staticShemaData[1]['submenu'][2]['active'] = true;
-=======
 $staticShemaData[0]["active"] = false;
 $staticShemaData[1]["active"] = true;
 $staticShemaData[1]['submenu'][3]['active'] = true;
->>>>>>> 512c3b3 (first commit)
 
 ?>
 <!DOCTYPE html>
@@ -18,11 +15,8 @@ $staticShemaData[1]['submenu'][3]['active'] = true;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Empowerment Education English One</title>
-<<<<<<< HEAD
     <link rel="icon" type="image/png" href="<?php echo $infoShemaData[4]["image"] ?>" >
-=======
     <link rel="icon" type="image/png" href="<?php echo $infoShemaData[4]["image"] ?>">
->>>>>>> 512c3b3 (first commit)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
@@ -134,7 +128,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                             alt="" srcset="" class="h-100">
                     </div>
                 </div>
-<<<<<<< HEAD
                
                 <div class="w-100 d-flex mt-3 justify-content-between gap-3 flex-wrap">
                     <div class="bg-white shadow p-3 rounded">
@@ -186,7 +179,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
 
     </div>
 </div>
-=======
 
                 <div class="w-100 d-flex mt-3 justify-content-between gap-3 flex-wrap">
                     <div class="bg-white shadow px-4 py-3 rounded">
@@ -261,7 +253,6 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                             <!-- nav student lable -->
                         </div>
 
->>>>>>> 512c3b3 (first commit)
 
                         <!-- SCROLL CONTAINER -->
                         <div class="table-scroll modelBox ps-3">
@@ -285,11 +276,8 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         <td><span class="badge bg-success">Paid</span></td>
                                         <td>Monthly fee</td>
                                         <td>2025-01-01</td>
-<<<<<<< HEAD
                                           <td class="text-nowrap">
-=======
                                         <td class="text-nowrap">
->>>>>>> 512c3b3 (first commit)
                                             <button class="btn btn-sm btn-primary">Edit</button>
                                             <button class="btn btn-sm btn-danger">Delete</button>
                                             <button class="btn btn-sm btn-info text-white">Detail</button>
@@ -411,10 +399,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
             </div>
         </main>
     </div>
-<<<<<<< HEAD
-=======
     <script src="../../script.js"></script>
->>>>>>> 512c3b3 (first commit)
 </body>
 
 </html>
