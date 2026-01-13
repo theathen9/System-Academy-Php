@@ -35,18 +35,18 @@ include "../data/dataShema.php";
             <ul class="nav flex-column">
                 <ul class="nav flex-column">
                     <?php foreach ($staticShemaData as $item): ?>
-                        <?php if (isset($item['submenu'])): ?>
+                        <?php if (isset($item[]['submenu'])): ?>
                             <li class="nav-item mb-1">
                                 <a class="nav-link rounded d-flex justify-content-between align-items-center
             <?= !empty($item['active']) ? 'bg-primary text-white' : 'text-dark'; ?>" data-bs-toggle="collapse"
-                                    href="#<?= $item['submenu_id']; ?>">
+                                    href="#<?= $item[]['submenu_id']; ?>">
                                     <?= $item['title']; ?>
                                     <span class="bi bi-chevron-down"></span>
                                 </a>
                                 <ul class="nav collapse flex-column ms-3
             <?= !empty($item['active']) ? 'show' : ''; ?>" id="<?= $item['submenu_id']; ?>">
 
-                                    <?php foreach ($item['submenu'] as $sub): ?>
+                                    <?php foreach ($item[]['submenu'] as $sub): ?>
                                         <li class="nav-item mb-1 w-100">
                                             <a href="<?= $sub['link']; ?>" class="nav-link rounded
                         <?= !empty($sub['active']) ? 'bg-primary text-white' : 'text-dark'; ?>">
