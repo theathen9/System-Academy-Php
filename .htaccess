@@ -1,29 +1,36 @@
 RewriteEngine On
 
-# -----------------------
+# =======================
 # Dashboard shortcut
-# /systemmanagement/dashboard
-# -----------------------
-RewriteRule ^admin/dashboard/?$ admin/dashboard.php [L]
+# =======================
+RewriteRule ^admin/dashboard/?$ admin/dashboard.php [L,END]
 
-# -----------------------
+# =======================
 # Admin routing
-# /systemmanagement/admin/xxx → admin/xxx.php
-# -----------------------
+# /admin/xxx → admin/xxx.php
+# =======================
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^admin/(.+)$ admin/$1.php [L]
+RewriteRule ^admin/([^/]+)/?$ admin/$1.php [L,END]
 
-# -----------------------
+# =======================
+# Admin subfolders
+# /admin/institute/employees → admin/institute/employees.php
+# =======================
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^admin/(.+)/([^/]+)/?$ admin/$1/$2.php [L,END]
+
+# =======================
 # Auth routing
-# -----------------------
+# =======================
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^auth/(.+)$ auth/$1.php [L]
+RewriteRule ^auth/([^/]+)/?$ auth/$1.php [L,END]
 
-# -----------------------
+# =======================
 # Teacher routing
-# -----------------------
+# =======================
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^teacher/(.+)$ teacher/$1.php [L]
+RewriteRule ^teacher/([^/]+)/?$ teacher/$1.php [L,END]
