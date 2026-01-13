@@ -1,15 +1,19 @@
-FROM php:8.3-apache
+FROM php:8.2-apache
 
-# Enable Apache rewrite (important for routing)
+# Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Install common PHP extensions (add more if needed)
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Install mysqli
+RUN docker-php-ext-install mysqli
 
-# Copy project files into Apache root
-COPY . /var/www/
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy project files
+COPY . .
 
 # Fix permissions
-RUN chown -R www-data:www-data /var/www/
+RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
+
