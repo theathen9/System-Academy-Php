@@ -24,17 +24,17 @@ $staticShemaData = [
         "submenu" => [
             [
                 "title"  => "Employees",
-                "link"   => "./institute/employees",
+                "link"   => "./employees",
                 "active" => false
             ],
             [
                 "title"  => "Department",
-                "link"   => "./institute/department",
+                "link"   => "./department",
                 "active" => false
             ],
             [
                 "title"  => "Teachers",
-                "link"   => "./institute/teacher",
+                "link"   => "./teacher",
                 "active" => false
             ],
             [
