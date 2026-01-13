@@ -2,7 +2,7 @@
 include "../../data/dataShema.php";
 $staticShemaData[0]["active"] = false;
 $staticShemaData[1]["active"] = true;
-$staticShemaData[1]['submenu'][1]['active'] = true;
+$staticShemaData[1]['submenu'][2]['active'] = true;
 
 ?>
 <!DOCTYPE html>
