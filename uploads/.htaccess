@@ -1,0 +1,10 @@
+# uploads/.htaccess 
+# ./.htaccess
+RewriteEngine On
+
+Options -Indexes
+
+
+<FilesMatch "\.(php|php5|phtml|phar)$">
+    Require all denied
+</FilesMatch>

@@ -1,0 +1,367 @@
+[14-May-2026 20:30:47 Asia/Phnom_Penh] STEP 2 HIT
+[14-May-2026 20:30:47 Asia/Phnom_Penh] SESSION student_id: 22
+[14-May-2026 20:30:47 Asia/Phnom_Penh] POST class_ids: ["1","4"]
+[14-May-2026 20:30:52 Asia/Phnom_Penh] STEP 2 HIT
+[14-May-2026 20:30:52 Asia/Phnom_Penh] SESSION student_id: 22
+[14-May-2026 20:30:52 Asia/Phnom_Penh] POST class_ids: ["1","4"]
+[14-May-2026 20:32:18 Asia/Phnom_Penh] STEP 2 HIT
+[14-May-2026 20:32:18 Asia/Phnom_Penh] SESSION student_id: 23
+[14-May-2026 20:32:18 Asia/Phnom_Penh] POST class_ids: ["4","3"]
+[14-May-2026 20:32:25 Asia/Phnom_Penh] STEP 2 HIT
+[14-May-2026 20:32:25 Asia/Phnom_Penh] SESSION student_id: 23
+[14-May-2026 20:32:25 Asia/Phnom_Penh] POST class_ids: ["4","3"]
+[15-May-2026 21:10:18 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:18 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:18 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:18 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:18 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:18 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:18 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:18 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:18 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:18 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:18 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:18 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:19 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:19 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:19 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:19 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:19 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:19 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:29 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:29 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:29 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:29 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:29 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:29 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:30 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:30 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:30 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:30 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:30 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:30 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:30 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:30 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:30 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:10:31 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:10:31 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:10:31 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:11:25 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:11:25 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:11:25 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:11:25 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:11:25 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:11:25 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:08 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:08 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:08 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:09 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:09 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:09 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:10 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:10 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:10 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:10 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:10 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:10 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:10 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:10 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:10 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:28 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:28 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:28 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:28 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:28 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:28 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:29 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:29 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:29 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:30 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:30 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:30 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:31 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:31 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:31 Asia/Phnom_Penh] POST class_ids: null
+[15-May-2026 21:14:31 Asia/Phnom_Penh] STEP 2 HIT
+[15-May-2026 21:14:31 Asia/Phnom_Penh] SESSION student_id: NULL
+[15-May-2026 21:14:31 Asia/Phnom_Penh] POST class_ids: null
+[17-May-2026 14:15:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:47 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:47 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:49 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:49 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:49 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:50 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:50 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:50 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:50 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:50 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:50 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:50 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:50 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:50 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:50 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:50 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:50 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:50 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:50 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:50 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:51 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:51 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:51 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:51 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:51 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:51 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:51 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:51 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:51 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 14:15:56 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:56 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:56 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:57 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:57 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:57 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:57 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:57 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:57 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:57 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:57 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:57 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:58 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:58 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:58 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:58 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:58 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:58 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:58 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:58 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:58 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:58 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:58 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:58 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:58 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:58 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:58 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:58 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:58 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:58 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:59 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:59 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:59 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:59 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:59 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:59 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:59 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:59 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:59 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:59 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:59 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:59 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:59 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:59 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:59 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:15:59 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:15:59 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:15:59 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:00 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:00 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:00 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:00 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:00 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:00 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:00 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:00 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:00 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:00 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:00 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:00 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:01 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:01 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:01 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:01 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:01 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:01 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:01 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:01 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:01 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 14:16:01 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 14:16:01 Asia/Phnom_Penh] SESSION student_id: 26
+[17-May-2026 14:16:01 Asia/Phnom_Penh] POST class_ids: ["1","3"]
+[17-May-2026 15:09:44 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:09:44 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:09:44 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:09:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:09:47 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:09:47 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:09:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:09:47 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:09:47 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:09:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:09:47 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:09:47 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:09:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:09:47 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:09:47 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:09:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:09:47 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:09:47 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:35 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:35 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:35 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:36 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:36 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:36 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:36 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:36 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:36 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:36 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:36 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:36 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:36 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:36 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:36 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:36 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:36 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:36 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:37 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:37 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:37 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:37 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:37 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:37 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:40 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:40 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:40 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:41 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:41 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:41 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:13:41 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:13:41 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:13:41 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:19:05 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:19:05 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:19:05 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:19:06 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:19:06 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:19:06 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:19:06 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:19:06 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:19:06 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:02 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:02 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:02 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:03 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:03 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:03 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:03 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:03 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:03 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:03 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:03 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:03 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:04 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:04 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:04 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:04 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:04 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:04 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:04 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:04 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:04 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:20:04 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:20:04 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:20:04 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:24:32 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:24:32 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:24:32 Asia/Phnom_Penh] POST class_ids: ["1","2"]
+[17-May-2026 15:26:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:26:47 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:26:47 Asia/Phnom_Penh] POST class_ids: ["1","2"]
+[17-May-2026 15:26:47 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '1')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:26:48 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:26:48 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:26:48 Asia/Phnom_Penh] POST class_ids: ["1","2"]
+[17-May-2026 15:26:48 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '1')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:26:48 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:26:48 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:26:48 Asia/Phnom_Penh] POST class_ids: ["1","2"]
+[17-May-2026 15:26:48 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '1')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:26:48 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:26:48 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:26:48 Asia/Phnom_Penh] POST class_ids: ["1","2"]
+[17-May-2026 15:26:48 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '1')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:27:37 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:27:37 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:27:37 Asia/Phnom_Penh] POST class_ids: ["2"]
+[17-May-2026 15:27:37 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '2')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:27:38 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:27:38 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:27:38 Asia/Phnom_Penh] POST class_ids: ["2"]
+[17-May-2026 15:27:38 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '2')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:27:38 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:27:38 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:27:38 Asia/Phnom_Penh] POST class_ids: ["2"]
+[17-May-2026 15:27:38 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '2')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:27:38 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:27:38 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:27:38 Asia/Phnom_Penh] POST class_ids: ["2"]
+[17-May-2026 15:27:38 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '2')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:27:39 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:27:39 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:27:39 Asia/Phnom_Penh] POST class_ids: ["2"]
+[17-May-2026 15:27:39 Asia/Phnom_Penh] PHP Fatal error:  Uncaught ArgumentCountError: The number of variables must match the number of parameters in the prepared statement in C:\laragon\www\System-Management\app\api\v1\register_process.php:389
+Stack trace:
+#0 C:\laragon\www\System-Management\app\api\v1\register_process.php(389): mysqli_stmt->bind_param('ii', 27, '2')
+#1 {main}
+  thrown in C:\laragon\www\System-Management\app\api\v1\register_process.php on line 389
+[17-May-2026 15:39:38 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:39:38 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:39:38 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:39:47 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:39:47 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:39:47 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:39:48 Asia/Phnom_Penh] STEP 3 ERROR: Column 'role_id' cannot be null
+[17-May-2026 15:56:05 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:56:05 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:56:05 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:57:26 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:57:26 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:57:26 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:58:16 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:58:16 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:58:16 Asia/Phnom_Penh] POST class_ids: ["1"]
+[17-May-2026 15:58:22 Asia/Phnom_Penh] STEP 2 HIT
+[17-May-2026 15:58:22 Asia/Phnom_Penh] SESSION student_id: 27
+[17-May-2026 15:58:22 Asia/Phnom_Penh] POST class_ids: ["1"]

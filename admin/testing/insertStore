@@ -1,0 +1,106 @@
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $action = $_POST['action'] ?? '';
+
+
+    // ==========================================================
+    // REGISTER STAFF
+    // ==========================================================
+    $dob = DateTime::createFromFormat('d-m-Y', $_POST['dob']);
+
+    if ($action === 'register_staff') {
+
+        $photo = uploadPhoto('staff_photo');
+
+        $data = [
+            'fst_name_kh' => post('fst_name_kh'),
+            // 'middle_name' => post('middle_name', ''),
+            'lst_name_kh' => post('lst_name_kh'),
+
+            'fst_name_eng' => post('fst_name_eng'),
+            // 'middle_name_eng' => post('middle_name_eng', ''),
+            'lst_name_eng' => post('lst_name_eng'),
+
+            'dob' => $dob ? $dob->format('Y-m-d') : null,
+
+            'gender' => post('gender'),
+            'department_id' => post('department_id'),
+
+            'birth_province' => post('birth_addr_province'),
+            'birth_district' => post('birth_addr_district'),
+            'birth_commune' => post('birth_addr_commune'),
+            'birth_village' => post('birth_addr_village'),
+
+            'curr_addr_province' => post('curr_addr_province'),
+            'curr_addr_district' => post('curr_addr_district'),
+            'curr_addr_commune' => post('curr_addr_commune'),
+            'curr_addr_village' => post('curr_addr_village'),
+
+            'phone1' => post('phone1'),
+            'phone2' => post('phone2', ''),
+            'email' => post('email', ''),
+
+            'profile_image' => $photo
+        ];
+
+        $ok = $staffCRUD->create($data);
+
+        $_SESSION[$ok ? 'success' : 'error'] =
+            $ok ? "Staff registered successfully!" : "Failed to register staff!";
+
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    } else if ($action === 'register_student') {
+
+        $photo = uploadPhoto('student_photo');
+        $dob = DateTime::createFromFormat('d-m-Y', $_POST['student_dob']);
+        $data = [
+            'fst_name_kh' => post('student_fst_name_kh'),
+            'lst_name_kh' => post('student_lst_name_kh'),
+
+            'fst_name_eng' => post('student_fst_name_eng'),
+            'lst_name_eng' => post('student_lst_name_eng'),
+            'dob' => $dob ? $dob->format('Y-m-d') : null,
+            'gender' => post('student_gender'),
+            'academic_year' => post('student_academic_year'),
+
+            'phone1' => post('student_phone1'),
+            'phone2' => post('student_phone2', ''),
+            'email' => post('student_email', ''),
+
+            'birth_province' => post('birth_addr_province'),
+            'birth_district' => post('birth_addr_district'),
+            'birth_commune' => post('birth_addr_commune'),
+            'birth_village' => post('birth_addr_village'),
+
+            'curr_addr_province' => post('curr_addr_province'),
+            'curr_addr_district' => post('curr_addr_district'),
+            'curr_addr_commune' => post('curr_addr_commune'),
+            'curr_addr_village' => post('curr_addr_village'),
+
+            'guardian1_name' =>
+            post('student_guardian1_fst_name') . ' ' . post('student_guardian1_lst_name', ''),
+
+            'guardian2_name' =>
+            post('student_guardian2_fst_name') . ' ' . post('student_guardian2_lst_name', ''),
+
+            'guardian_email' => post('student_guardian_email', ''),
+
+            'guardian_curr_addr_province' => post('student_guardian_curr_addr_province'),
+            'guardian_curr_addr_district' => post('student_guardian_curr_addr_district'),
+            'guardian_curr_addr_commune' => post('student_guardian_curr_addr_commune'),
+            'guardian_curr_addr_village' => post('student_guardian_curr_addr_village'),
+
+            'profile_image' => $photo,
+            'created_by' => post('created_by')
+        ];
+
+        $ok = $studentCRUD->create($data);
+
+        $_SESSION[$ok ? 'success' : 'error'] =
+            $ok ? "Student registered successfully!" : "Failed to register student!";
+
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    }
+}

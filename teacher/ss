@@ -1,0 +1,61 @@
+ <!-- Navbar -->
+    <!-- <nav class="navbar navbar-expand-md navbar-dark fixed-top shadow-sm ">
+        <div class="container-fluid px-3">
+
+            <!-- Brand -->
+    <a class="navbar-brand fw-bold text-black" href="#">
+        <i class="bi bi-box"></i> 3E ONE
+    </a>
+
+    <!-- Toggle (Mobile) -->
+    <button class="navbar-toggler bg-black" type="button" data-bs-toggle="collapse"
+        data-bs-target="#mainNavbar">
+        <span class="navbar-toggler-icon "></span>
+    </button>
+
+    <!-- Menu -->
+    <div class="collapse navbar-collapse bg-white mt-3" id="mainNavbar">
+        <ul class="nav flex-column ">
+            <?php foreach ($routTeacher as $item): ?>
+                <?php if (isset($item['submenu'])): ?>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link rounded d-flex justify-content-between align-items-center <?= !empty($item['active']) ? 'text-dark' : ' text-dark'; ?>"
+                            data-bs-toggle="collapse"
+                            href="#<?= $item['submenu_id']; ?>"
+                            aria-expanded="<?= (!empty($item['active']) ? 'true' : 'false'); ?>">
+                            <?= $item['title']; ?>
+                            <span class=" bi submenu-icon <?= (!empty($item['active']) || !empty(array_filter($item['submenu'], fn($s) => !empty($s['active'])))) ? 'bi-chevron-down' : 'bi-chevron-left'; ?>"></span>
+                        </a>
+                        <ul id="<?= $item['submenu_id']; ?>"
+                            class="nav collapse flex-column ms-3
+    <?= (!empty($item['active']) || !empty(array_filter($item['submenu'], fn($s) => !empty($s['active'])))) ? 'show' : ''; ?>">
+
+                            <?php foreach ($item['submenu'] as $sub): ?>
+                                <li class="nav-item mb-1 w-100">
+                                    <a href="<?= $sub['link']; ?>" class="nav-link rounded
+                            <?= !empty($sub['active']) ? 'bg-primary text-white' : 'text-dark'; ?>">
+                                        <?= $sub['title']; ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+
+                        </ul>
+                    </li>
+
+                <?php else: ?>
+                    <li class="nav-item mb-1 w-100">
+                        <a href="<?= $item['link']; ?>" class="nav-link rounded
+                <?= !empty($item['active']) ? 'bg-primary text-white' : 'text-dark'; ?>">
+                            <?php if (!empty($item['icon'])): ?>
+                                <i class="<?= $item['icon']; ?> me-1"></i>
+                            <?php endif; ?>
+                            <?= $item['title']; ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+    </div>
+    </nav> -->

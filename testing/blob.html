@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // Create a Blob from text
+const myBlob = new Blob(["Hello, world!"], { type: "text/plain" });
+
+// Check size and type
+console.log(myBlob.size); // 13
+console.log(myBlob.type); // "text/plain"
+const fs = require("fs");
+
+// Read a file into a Buffer
+const buffer = fs.readFileSync("example.txt");
+console.log(buffer); // <Buffer 48 65 6c 6c 6f 0a> (binary data)
+
+// Convert buffer to string
+console.log(buffer.toString()); // "Hello"
+
+    </script>
+</body>
+</html>

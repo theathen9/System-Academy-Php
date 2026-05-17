@@ -1,29 +1,18 @@
+# root 
+# ./.htaccess
 RewriteEngine On
 
-# -----------------------
-# Dashboard shortcut
-# /systemmanagement/dashboard
-# -----------------------
-RewriteRule ^admin/dashboard/?$ admin/dashboard.php [L]
 
-# -----------------------
-# Admin routing
-# /systemmanagement/admin/xxx → admin/xxx.php
-# -----------------------
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^admin/(.+)$ admin/$1.php [L]
+RewriteRule ^(.+)$ $1.php [L]
 
-# -----------------------
-# Auth routing
-# -----------------------
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^auth/(.+)$ auth/$1.php [L]
 
-# -----------------------
-# Teacher routing
-# -----------------------
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^teacher/(.+)$ teacher/$1.php [L]
+# RewriteRule ^admin/([0-9]+)$ dashboard.php?$1 [L]
+
+# for teacher Rout
+# RewriteRule ^teacher/([0-9]+)$ dashboard.php?$1 [L]
+
+
+RewriteCond %{REQUEST_URI} !^/system-management/app/
+RewriteRule ^api/(.*)$ app/api/$1 [L]

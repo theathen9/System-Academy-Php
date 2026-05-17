@@ -1,180 +1,964 @@
-<?php
-include "../data/dataShema.php";
+    <?php
+    // echo "<pre>";
+    // print_r($_SESSION);
+    // print_r($_COOKIE);
+    // exit;
+    //./admin/institute/employees.php
+    // require_once( __DIR__ . "/../../config/db.php");
+    session_start();
+    date_default_timezone_set('Asia/Phnom_Penh');
+    // include_once __DIR__ . '/../config/db.php';
+    // include_once __DIR__ . '/../config/app.php';
+    include_once __DIR__ . '/../data/dbSchemaData.php';
+    include_once __DIR__ . '/../data/dataSchema.php';
+    // require_once __DIR__ . '/../auth/auth.php';
+    // include_once __DIR__ . '/api/dashboard.php';
+    include_once __DIR__ . '/../config/bootstrap.php';
 
-?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Empowerment Education English One</title>
-    <link rel="icon" type="image/png" href="../src/assets/icon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
-    </script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
-        integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../src/style.css">
 
-</head>
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
 
-<body class="container-fluid p-0 ">
-    <div class="row g-3">
 
-        <!-- Sidebar -->
-        <nav class="navBar col-12 col-md-3 col-sm-3 col-lg-2 p-3 vh-100 position-sticky top-0 ">
-            <div class="d-flex gap-1 mb-4 align-items-center align-self-center">
-                <img src="../src/assets/logo.jpg" width="60" height="60" alt="logo" class="rounded-circle">
-                <div class="title">
-                    <p class="m-auto">Empowerment <br>Education English One</p>
+    $userId = checkAuth();
+
+    if (!$userId) {
+        header("Location: " . BASE_URL . "/auth/signin.php");
+        exit;
+    }
+
+    authorizeRole('teacher');
+    //     var_dump($_SESSION);
+    // var_dump($_COOKIE);
+    // exit;
+
+    // include_once "/config/db.php";
+    $routeTeacher[0]["active"] = true;
+
+
+
+    // Fetch DISTINCT years (clean)
+    $yearResult = $conn->query("
+        SELECT DISTINCT SUBSTRING_INDEX(academic_year, '-', 1) AS year
+        FROM tblClasses
+        ORDER BY year ASC
+    ");
+
+    $years = [];
+    while ($row = $yearResult->fetch_assoc()) {
+        $years[] = $row['year'];
+    }
+
+    // Get filters
+    $selectedYear = isset($_GET['selectYear']) && $_GET['selectYear'] !== ''
+        ? $_GET['selectYear']
+        : 'allYear';
+
+    $selectedClass = isset($_GET['selectClass']) && $_GET['selectClass'] !== ''
+        ? $_GET['selectClass']
+        : 'allClasses';
+
+    $status = isset($_GET['status'])
+        ? (array)$_GET['status']
+        : [];
+
+
+
+
+    // Dynamic query
+    $sql = "SELECT class_id, class_name FROM tblClasses WHERE 1=1";
+    $params = [];
+    $types = "";
+
+    if ($selectedYear !== 'allYear') {
+        $sql .= " AND SUBSTRING_INDEX(academic_year, '-', 1) = ?";
+        $params[] = $selectedYear;
+        $types .= "s";
+    }
+
+    if ($selectedClass !== 'allClasses') {
+        $sql .= " AND class_id = ?";
+        $params[] = (int)$selectedClass;
+        $types .= "i";
+    }
+
+    $sql .= " ORDER BY class_name ASC";
+
+    $stmt = $conn->prepare($sql);
+
+    if ($params) {
+        $stmt->bind_param($types, ...$params);
+    }
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $classes = [];
+    while ($row = $result->fetch_assoc()) {
+        $classes[] = $row;
+    }
+
+    $totalStudent = countStudent($conn, "");
+    $totalTeacher = countTeacher($conn, "");
+
+
+
+    $startDate = $_GET['startDate'] ?? date('Y-m-d');
+    $endDate   = $_GET['endDate'] ?? date('Y-m-d');
+
+    $year = $startDate;
+    $firstYear = explode('-', $year)[0];
+
+
+    // Format for display
+    $datePicker = date('M d, Y', strtotime($startDate)) . ' — ' . date('M d, Y', strtotime($endDate));
+
+
+    $userId
+
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard | <?php echo $infoSchemaData[1]["name_short"] ?></title>
+        <link rel="icon" type="image/png" href="<?php echo $infoSchemaData[5]["image"] ?>">
+        <link rel="icon" type="image/png" href="<?php echo $infoSchemaData[5]["image"] ?>">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+        </script>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+            integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="../../src/style.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+
+        <style>
+            .dataLoading.loading {
+                opacity: 0.6;
+                pointer-events: none;
+            }
+
+            .tag-box {
+                display: flex;
+                flex-wrap: wrap;
+                border: 1px solid #ccc;
+                padding: 5px;
+                border-radius: 6px;
+            }
+
+            .tag {
+                background: #e3f2fd;
+                margin: 3px;
+                padding: 5px 10px;
+                border-radius: 20px;
+                display: flex;
+                align-items: center;
+            }
+
+            .tag span {
+                margin-left: 8px;
+                cursor: pointer;
+                color: red;
+            }
+
+            .sidebar a {
+                display: block;
+                padding: 12px 20px;
+                color: #333;
+                text-decoration: none;
+            }
+
+            .sidebar a:hover {
+                background: #0d6efd;
+                color: white;
+                border-radius: 6px;
+            }
+
+            .content {
+                margin-left: 240px;
+                padding: 20px;
+            }
+
+            .card-box {
+                border-radius: 12px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .stat-icon {
+                font-size: 28px;
+                padding: 15px;
+                border-radius: 10px;
+                color: white;
+            }
+
+            .bg-blue {
+                background: #0d6efd;
+            }
+
+            .bg-green {
+                background: #28a745;
+            }
+
+            .bg-orange {
+                background: #f39c12;
+            }
+
+            .bg-red {
+                background: #e74c3c;
+            }
+        </style>
+
+    </head>
+
+    <body class="container-fluid p-0 overflow-x-hidden">
+        <div class="row g-3">
+            <nav class="navBar col-2 p-3">
+                <div class="d-flex gap-1 mb-4 align-items-center align-self-center position-sticky top-0 bg-white p-0">
+                    <img src="<?php echo $infoSchemaData[5]["image"] ?>" width="60" height="60" alt="logo" class="rounded-circle">
+                    <div class="title">
+                        <p class="m-auto"><?php echo $infoSchemaData[1]["name_short"] ?></p>
+                    </div>
                 </div>
-            </div>
-            <ul class="nav flex-column">
-                <!-- Dashboard -->
-                <li class="nav-item mb-1">
+                <ul class="nav flex-column">
+                    <?php foreach ($routeTeacher as $item): ?>
+                        <?php if (isset($item['submenu'])): ?>
+                            <li class="nav-item mb-1">
+                                <a class="nav-link rounded d-flex justify-content-between align-items-center <?= !empty($item['active']) ? 'text-dark' : ' text-dark'; ?>"
+                                    data-bs-toggle="collapse"
+                                    href="#<?= $item['submenu_id']; ?>"
+                                    aria-expanded="<?= (!empty($item['active']) ? 'true' : 'false'); ?>">
+                                    <?= $item['title']; ?>
+                                    <span class=" bi submenu-icon <?= (!empty($item['active']) || !empty(array_filter($item['submenu'], fn($s) => !empty($s['active'])))) ? 'bi-chevron-down' : 'bi-chevron-left'; ?>"></span>
+                                </a>
+                                <ul id="<?= $item['submenu_id']; ?>"
+                                    class="nav collapse flex-column ms-3
+    <?= (!empty($item['active']) || !empty(array_filter($item['submenu'], fn($s) => !empty($s['active'])))) ? 'show' : ''; ?>">
 
-                    <a href="#" class="nav-link  text-white bg-primary rounded">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
-                </li>
+                                    <?php foreach ($item['submenu'] as $sub): ?>
+                                        <li class="nav-item mb-1 w-100">
+                                            <a href="<?= $sub['link']; ?>" class="nav-link rounded
+                            <?= !empty($sub['active']) ? 'bg-primary text-white' : 'text-dark'; ?>">
+                                                <?= $sub['title']; ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
 
-                <!-- Institute with submenu -->
-                <li class="nav-item mb-1">
-                    <a class="nav-link text-dark rounded d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" href="#instituteSubmenu" role="button" aria-expanded="false">
-                        Institute
-                        <span class="bi bi-chevron-down"></span>
-                        <!-- Optional icon -->
-                    </a>
-                    <ul class="nav collapse flex-column ms-3" id="instituteSubmenu">
-                        <li class="nav-item mb-1 w-100">
-                            <a href="./institute/departments.php" class="nav-link text-dark rounded">Departments</a>
-                        </li>
-                        <li class="nav-item mb-1 w-100">
-                            <a href="#" class="nav-link text-dark rounded">Teachers</a>
-                        </li>
-                        <li class="nav-item mb-1">
-                            <a href="#" class="nav-link text-dark rounded">Students</a>
-                        </li>
-                    </ul>
-                </li>
+                                </ul>
+                            </li>
 
-                <!-- Attendance -->
-                <li class="nav-item mb-1">
-                    <a class="nav-link text-dark rounded d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" href="#attendanceSubmenu" role="button" aria-expanded="false">
-                        Attendance
-                        <span class="bi bi-chevron-down"></span>
-                        <!-- Optional icon -->
-                    </a>
-                    <ul class="nav collapse flex-column ms-3 " id="attendanceSubmenu">
-                        <li class="nav-item mb-1 w-100">
-                            <a href="./Dashboard.php" class="nav-link text-dark rounded">Dashboard</a>
-                        </li>
-                        <li class="nav-item mb-1 w-100">
-                            <a href="#" class="nav-link text-dark rounded">Attendance</a>
-                        </li>
-
-                    </ul>
-                </li>
-
-                <!-- Examination with submenu -->
-                <li class="nav-item mb-1 ">
-                    <a class="nav-link text-dark rounded d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" href="#examSubmenu" role="button" aria-expanded="false">
-                        Examination
-                        <span class="bi bi-chevron-down"></span>
-                    </a>
-                    <ul class="nav collapse flex-column ms-3 " id="examSubmenu">
-                        <li class="nav-item mb-1 w-100">
-                            <a href="#" class="nav-link text-dark rounded ">Schedule</a>
-                        </li>
-                        <li class="nav-item mb-1 w-100">
-                            <a href="#" class="nav-link text-dark rounded ">Results</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <!-- Schedule with submenu -->
-                <li class="nav-item mb-1 ">
-                    <a class="nav-link text-dark rounded d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" href="#scheduleSubmenu" role="button" aria-expanded="false">
-                        Schedule
-                        <span class="bi bi-chevron-down"></span>
-                    </a>
-                    <ul class="nav collapse flex-column ms-3 " id="scheduleSubmenu">
-                        <li class="nav-item mb-1 w-100">
-                            <a href="#" class="nav-link text-dark rounded ">Schedule</a>
-                        </li>
-
-                    </ul>
-                </li>
-
-                <li class="nav-item mb-1">
-                    <a href="#" class="nav-link text-dark rounded">Billing</a>
-                </li>
-                <li class="nav-item mb-1">
-                    <a href="#" class="nav-link text-dark rounded">Accounts</a>
-                </li>
-            </ul>
-
-        </nav>
-
-
-        <!-- Main area -->
-        <main style="height: 1000px;" class="col-12 col-md-6 col-lg-9 bg-light">
-            <div
-                class="d-flex justify-content-between align-items-center px-2 py-2 bg-white py-md-1 position-sticky top-0 ">
-                <div class="app"><img src="../src/assets/logo.jpg" alt="" srcset=""></div>
-                <ul class="list-unstyled m-0 p-0">
-                    <li>
-                        <a class="text-decoration-none text-black" data-bs-toggle="collapse" data-bs-target="#myMenu"
-                            aria-expanded="false" aria-controls="myMenu">
-                            <i class="bi bi-list fs-2"></i>
-                        </a>
-                    </li>
+                        <?php else: ?>
+                            <li class="nav-item mb-1 w-100">
+                                <a href="<?= $item['link']; ?>" class="nav-link rounded
+                <?= !empty($item['active']) ? 'bg-primary text-white' : 'text-dark'; ?>">
+                                    <?php if (!empty($item['icon'])): ?>
+                                        <i class="<?= $item['icon']; ?> me-1"></i>
+                                    <?php endif; ?>
+                                    <?= $item['title']; ?>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </ul>
-                <!-- Collapsible Menu -->
-                <div class="collapse" id="myMenu">
-                    <ul class="list-unstyled bg-light p-3">
-                        <li><a href="#" class="text-black text-decoration-none">Dashboard</a></li>
-                        <li><a href="#" class="text-black text-decoration-none">Departments</a></li>
-                        <li><a href="#" class="text-black text-decoration-none">Teachers</a></li>
-                    </ul>
+            </nav>
+
+            <!-- Main area -->
+            <main class="col-10 bg-light">
+                <div
+                    class="d-flex justify-content-between align-items-center px-2 py-2 bg-white py-md-1 position-sticky top-0 z-3">
+                    <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
+
+                    <div class="dropdown">
+                        <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
+                            <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
+                            <div>Username</div>
+                        </button>
+
+                        <ul class="dropdown-menu bg-white ">
+                            <a href="../auth/signout.php" class="text-decoration-none">
+                                <li><button class="dropdown-item">Sign Out</button></li>
+                                <li><button class="dropdown-item">Account</button></li>
+                            </a>
+                        </ul>
+                    </div>
                 </div>
 
+                <div class="container-lg container-md container-sm p-3">
+                    <div class="w-100 d-flex justify-content-between flex-wrap h-25">
+                        <div class="d-flex gap-2 w-100">
+                            <form method="GET" id="filterForm" class="d-flex justify-content-around w-100" autocomplete="off">
+                                <div class="d-flex w-100">
+
+                                    <div class="me-2">
+                                        <h3 class="text-break">Analytics</h3>
+                                    </div>
+                                    <div class="d-flex w-75">
+
+                                        <select name="selectYear" id="selectYear" class="form-select me-2 w-50">
+                                            <option value="">Select Years</option>
+                                            <option value="allYear">All Years</option>
+                                            <?php foreach ($years as $y): ?>
+                                                <option value="<?= $y ?>" <?= $selectedYear === $y ? 'selected' : '' ?>>
+                                                    <?= $y ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+
+                                        <select name="selectClass" id="selectClass" class="form-select me-2">
+                                            <option value="">Select Class</option>
+                                            <option value="allClasses">All Classes</option>
+                                            <?php foreach ($classes as $c): ?>
+                                                <option value="<?= $c['class_id'] ?>" <?= $selectedClass == $c['class_id'] ? 'selected' : '' ?>>
+                                                    <?= $c['class_name'] ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="d-flex">
+
+                                    <!-- Date Picker -->
+                                    <div class="d-flex me-3">
+
+                                        <!-- Display -->
+                                        <input type="text"
+                                            id="dateDisplay"
+                                            class="form-control"
+                                            value="<?= htmlspecialchars($datePicker) ?>"
+                                            readonly
+                                            style="width: 260px;">
+
+                                        <!-- Hidden Start -->
+                                        <input type="hidden" name="startDate" id="startDate"
+                                            value="<?= $startDate ?>">
+
+                                        <!-- Hidden End -->
+                                        <input type="hidden" name="endDate" id="endDate"
+                                            value="<?= $endDate ?>">
+
+                                    </div>
+
+                                    <!-- Filter Dropdown -->
+                                    <div class="dropdown">
+                                        <button style="width: 117px;"
+                                            type="button"
+                                            class="btn btn-primary d-flex align-items-center justify-content-center"
+                                            data-bs-toggle="dropdown">
+
+                                            <i class="fa fa-filter me-2"></i> Filter
+                                        </button>
+
+                                        <div class="dropdown-menu p-3 bg-white">
+
+                                            <?php
+                                            $selectedStatus = $_GET['status'] ?? [];
+                                            ?>
+
+                                            <div class="form-check">
+                                                <input id="filterAll" class="form-check-input" type="checkbox" name="status[]" value="all"
+                                                    <?= in_array('all', $selectedStatus) ? 'checked' : '' ?>>
+                                                <label class="form-check-label">All</label>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input id="filterAttendances" class="form-check-input" type="checkbox" name="status[]" value="attendance"
+                                                    <?= in_array('attendance', $selectedStatus) ? 'checked' : '' ?>>
+                                                <label class="form-check-label">Attendance</label>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input id="filterPayments" class="form-check-input" type="checkbox" name="status[]" value="payment"
+                                                    <?= in_array('payment', $selectedStatus) ? 'checked' : '' ?>>
+                                                <label class="form-check-label">Payment</label>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input id="filterEnrollments" class="form-check-input" type="checkbox" name="status[]" value="enrollment"
+                                                    <?= in_array('Enrollment', $selectedStatus) ? 'checked' : '' ?>>
+                                                <label class="form-check-label">Enrollment</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button style="width: 135px;" type="button" class="btn btn-success ms-3 h-auto">
+                                            Export Data
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
 
 
+                        </div>
 
-                <div class="title">Welcome to <?php echo $infoShemaData[0]["name"] ?></div>
+                    </div>
 
-                <div class="dropdown">
-                    <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
-                        <div>Username</div>
-                    </button>
 
-                    <ul class="dropdown-menu">
-                        <a href="../auth/signout.php" class="text-decoration-none">
-                            <li><button class="dropdown-item">Sign Out</button></li>
-                        </a>
-                    </ul>
                 </div>
 
-            </div>
-    </div>
+                <div class="w-100 d-flex mt-3 ms-3 justify-content-between gap-3 flex-wrap dataLoading">
+                    <div class="w-100 bg-white shadow px-4 py-3 rounded">
+                        <div class="row g-4">
+                            <div class="row g-4">
+                                <?php
+
+                                // Students all 
+                                $getStudentCard = "SELECT COUNT(*) as total FROM tblStudents";
+                                $studentCard = $conn->query($getStudentCard)->fetch_assoc()['total'];
+
+                                // Teacher all 
+                                $getTeacherCard = "SELECT COUNT(*) as total FROM tblEmployees where department_id = 4";
+                                $teacherCard = $conn->query($getTeacherCard)->fetch_assoc()['total'];
+                                $cards = [
+                                    ["Total Revenue", "totalRevenueCard", "fa-dollar-sign", "bg-green", 0], // default 0, update later
+                                    ["Total Students", "totalStudentCard", "fa-graduation-cap", "bg-blue", $studentCard],
+                                    ["Total Teachers", "totalTeacherCard", "fa-users", "bg-green", $teacherCard],
+                                    ["Total Class", "classCard", "fa-school", "bg-red", 1], // hardcoded example
+                                ];
+                                ?>
+
+                                <?php foreach ($cards as $c): ?>
+                                    <div class="col-md-3">
+                                        <div class="card card-box">
+                                            <div class="card-body d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6><?= htmlspecialchars($c[0]) ?></h6>
+                                                    <h3 id="<?= htmlspecialchars($c[1]) ?>"><?= htmlspecialchars($c[4]) ?></h3>
+                                                </div>
+                                                <div class="stat-icon <?= htmlspecialchars($c[3]) ?>">
+                                                    <i class="fa <?= htmlspecialchars($c[2]) ?>"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+
+                        <div class="row g-4 mt-2">
+
+
+                            <!-- Attendance -->
+                            <div class="col-md-8">
+                                <div class="card card-box">
+                                    <div class="card-body">
+                                        <h5>Attendance Statistics</h5>
+                                        <canvas id="attenChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="card card-box">
+                                    <div class="card-body">
+                                        <h5>Attendance Overview</h5>
+                                        <canvas id="attenOverviewChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
-    <div class="container-lg container-md container-sm  p-4">
-        <div>a</div>
-    </div>
-    </main>
-    </div>
-</body>
+                            <!-- Enrollment -->
+                            <div class="col-md-8">
+                                <div class="card card-box">
+                                    <div class="card-body">
+                                        <h5>Enrollment Statistics</h5>
+                                        <canvas id="enrollChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
 
-</html>
+                            <div class="col-md-4">
+                                <div class="card card-box">
+                                    <div class="card-body">
+                                        <h5>Enrollment Overview</h5>
+                                        <canvas id="enrollOverviewChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+
+                        <div class="card card-box">
+                            <div class="card-body">
+
+                                <h5>Recent Activity</h5>
+
+                                <ul class="list-group">
+
+                                    <li class="list-group-item">
+                                        New student enrolled — Grade 3B
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        Scheduled examination next Monday
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        Attendance marked for Grade 6A
+                                    </li>
+
+                                    <li class="list-group-item">
+                                        Tuition fee payment completed
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script src="../../script.js"></script>
+
+        <script>
+            let startDate = "<?= $startDate ?>";
+            let endDate = "<?= $endDate ?>";
+            let selectYear = "<?= $selectedYear ?>";
+            let selectClass = "<?= $selectedClass ?>";
+
+            // ----------------------
+            // Flatpickr Setup
+            // ----------------------
+            const fp = flatpickr("#dateDisplay", {
+                mode: "range",
+                maxDate: "today",
+                defaultDate: [startDate, endDate],
+                onReady: function(selectedDates) {
+                    if (selectedDates.length === 2) formatDisplay(selectedDates);
+                },
+                onChange: function(selectedDates) {
+                    if (selectedDates.length === 2) {
+                        startDate = formatDateLocal(selectedDates[0]);
+                        endDate = formatDateLocal(selectedDates[1]);
+                        formatDisplay(selectedDates);
+
+                        // Clear year selection when using date range
+                        document.getElementById('selectYear').value = '';
+                        selectYear = '';
+
+                        loadDashboard();
+                    }
+                }
+            });
+
+            function formatDateLocal(date) {
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const d = String(date.getDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+
+            function formatDisplay(dates) {
+                const options = {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                };
+                document.getElementById("dateDisplay").value =
+                    `${dates[0].toLocaleDateString('en-US', options)} — ${dates[1].toLocaleDateString('en-US', options)}`;
+            }
+
+            // ----------------------
+            // Detect Filter Type
+            // ----------------------
+            function detectFilterType(start, end) {
+                if (!start || !end) return 'custom';
+
+                const s = new Date(start),
+                    e = new Date(end),
+                    today = new Date();
+                [s, e, today].forEach(d => d.setHours(0, 0, 0, 0));
+
+                const format = d => d.toISOString().split('T')[0];
+
+                const todayStr = format(today);
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                const last7Start = new Date(today);
+                last7Start.setDate(today.getDate() - 6);
+
+                const firstDayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                const firstDayLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                const lastDayLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+
+                const firstDayYear = new Date(today.getFullYear(), 0, 1);
+                const firstDayLastYear = new Date(today.getFullYear() - 1, 0, 1);
+                const lastDayLastYear = new Date(today.getFullYear() - 1, 11, 31);
+
+                const sStr = format(s),
+                    eStr = format(e);
+
+                if (sStr === todayStr && eStr === todayStr) return 'today';
+                if (sStr === format(yesterday) && eStr === format(yesterday)) return 'yesterday';
+                if (sStr === format(last7Start) && eStr === todayStr) return 'last7days';
+                if (sStr === format(firstDayMonth) && eStr === todayStr) return 'thisMonth';
+                if (sStr === format(firstDayLastMonth) && eStr === format(lastDayLastMonth)) return 'lastMonth';
+                if (sStr === format(firstDayYear) && eStr === todayStr) return 'thisYear';
+                if (sStr === format(firstDayLastYear) && eStr === format(lastDayLastYear)) return 'lastYear';
+
+                return 'custom';
+            }
+
+            // ----------------------
+            // Charts Setup
+            // ----------------------
+            let enrollChart, attendanceChart, attenOverviewChart, enrollOverviewChart;
+
+            function initCharts() {
+                enrollChart = new Chart(document.getElementById('enrollChart'), {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Enrollments',
+                            data: []
+                        }]
+                    }
+                });
+                attendanceChart = new Chart(document.getElementById('attenChart'), {
+                    type: 'bar', // changed from 'bar' to 'line'
+                    data: {
+                        labels: [], // x-axis labels (dates)
+                        datasets: [{
+                                label: 'Present',
+                                data: [],
+                                borderColor: '#28a745',
+                                backgroundColor: 'rgba(40, 167, 70, 0.9)',
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Absent',
+                                data: [],
+                                borderColor: '#e74c3c',
+                                backgroundColor: 'rgba(231,76,60,0.9)',
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Late',
+                                data: [],
+                                borderColor: '#f1c40f',
+                                backgroundColor: 'rgba(241,196,15,0.9)',
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            intersect: false
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // attenOverviewChart = new Chart(document.getElementById('attenOverviewChart'), {
+                //     type: 'doughnut',
+                //     data: {
+                //         datasets: [{
+                //             labels: ['Present', 'Absent', 'Late'],
+                //             data: [],
+                //             backgroundColor: ['#28a745', '#e74c3c', '#c5e73c']
+                //         }]
+                //     },
+                //     options: {
+                //         responsive: true,
+                //         plugins: {
+                //             legend: {
+                //                 position: 'bottom'
+                //             },
+                //             datalabels: {
+                //                 color: '#fff',
+                //                 formatter: (v, ctx) => {
+                //                     const d = ctx.chart.data.datasets[0].data;
+                //                     const total = d.reduce((a, b) => a + b, 0);
+                //                     return total ? ((v / total) * 100).toFixed(1) + '%' : '0%';
+                //                 }
+                //             }
+                //         }
+                //     },
+                //     plugins: [ChartDataLabels]
+                // });
+
+
+                attenOverviewChart = new Chart(document.getElementById('attenOverviewChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Present', 'Absent', 'Late'],
+                        datasets: [{
+                            data: [],
+                            backgroundColor: ['#28a745', '#e74c3c', '#f1c40f'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '65%', // 👈 makes space for center text
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            datalabels: {
+                                color: '#fff',
+                                font: {
+                                    weight: 'bold',
+                                    size: 12
+                                },
+                                formatter: (value, ctx) => {
+                                    const data = ctx.chart.data.datasets[0].data;
+                                    const total = data.reduce((a, b) => a + b, 0);
+
+                                    if (!total) return '0%';
+
+                                    return ((value / total) * 100).toFixed(1) + '%';
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const data = context.dataset.data;
+                                        const total = data.reduce((a, b) => a + b, 0);
+                                        const value = context.raw;
+
+                                        const percent = total ?
+                                            ((value / total) * 100).toFixed(1) :
+                                            0;
+
+                                        return `${context.label}: ${value} (${percent}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels] // keep this
+                });
+
+                enrollOverviewChart = new Chart(document.getElementById('enrollOverviewChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Paid', 'Unpaid'],
+                        datasets: [{
+                            data: [],
+                            backgroundColor: ['#28a745', '#e74c3c']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            datalabels: {
+                                color: '#fff',
+                                formatter: (v, ctx) => {
+                                    const d = ctx.chart.data.datasets[0].data;
+                                    const total = d.reduce((a, b) => a + b, 0);
+                                    return total ? ((v / total) * 100).toFixed(1) + '%' : '0%';
+                                }
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+
+            function updateUI(data) {
+                document.getElementById('totalStudentCard').innerText = data.studentCard ?? 0;
+                document.getElementById('totalTeacherCard').innerText = data.teacherCard ?? 0;
+                document.getElementById('totalRevenueCard').innerText = '$' + (data.revenue ?? 0);
+
+                // Enrollment chart
+                enrollChart.data.labels = data.enrollChart?.labels ?? [];
+                enrollChart.data.datasets[0].data = data.enrollChart?.data ?? [];
+                enrollChart.update();
+
+                // // Attendance chart
+                // attendanceChart.data.labels = data.attendanceChart?.labels ?? [];
+                // attendanceChart.data.datasets[0].data = data.attendanceChart?.present ?? [];
+                // attendanceChart.data.datasets[1].data = data.attendanceChart?.absent ?? [];
+                // attendanceChart.data.datasets[2].data = data.attendanceChart?.late ?? [];
+                // const maxValue = Math.max(
+                //     ...data.attendanceChart.present,
+                //     ...data.attendanceChart.absent,
+                //     ...data.attendanceChart.late
+                // );
+
+                // attendanceChart.options.scales.y.max = maxValue + 1;
+                // attendanceChart.options.scales.x.max = maxValue + 1;
+                // attendanceChart.update();
+                attendanceChart.data.labels = data.attendanceChart?.labels ?? [];
+                attendanceChart.data.datasets[0].data = data.attendanceChart?.present ?? [];
+                attendanceChart.data.datasets[1].data = data.attendanceChart?.absent ?? [];
+                attendanceChart.data.datasets[2].data = data.attendanceChart?.late ?? [];
+
+                const maxValue = Math.max(
+                    ...data.attendanceChart.present,
+                    ...data.attendanceChart.absent,
+                    ...data.attendanceChart.late
+                );
+
+                attendanceChart.options.scales.y.max = maxValue + 1;
+
+                // ✅ DO NOT TOUCH X AXIS
+                // attendanceChart.options.scales.x.max = ...
+
+                attendanceChart.update();
+
+
+                attenOverviewChart.data.datasets[0].data = [
+                    data.attendanceOverview?.present ?? 0,
+                    data.attendanceOverview?.absent ?? 0,
+                    data.attendanceOverview?.late ?? 0
+                ];
+                attenOverviewChart.update();
+
+                enrollOverviewChart.data.datasets[0].data = [
+                    data.enrollmentOverview?.paid ?? 0,
+                    data.enrollmentOverview?.unpaid ?? 0
+                ];
+                enrollOverviewChart.update();
+
+            }
+
+            // ----------------------
+            // Load Dashboard
+            // ----------------------
+            async function loadDashboard() {
+                const loader = document.querySelector(".dataLoading");
+                loader.classList.add('loading');
+
+                try {
+                    selectYear = document.getElementById('selectYear').value || 'allYear';
+                    selectClass = document.getElementById('selectClass').value || '';
+
+                    const filterAll = document.getElementById('filterAll');
+                    const otherCheckboxes = document.querySelectorAll('input[name="status[]"]:not(#filterAll)');
+
+                    const anyChecked = Array.from(otherCheckboxes).some(cb => cb.checked);
+                    if (!anyChecked) {
+                        filterAll.checked = true;
+                        otherCheckboxes.forEach(cb => cb.checked = true);
+                    }
+
+                    let statuses = Array.from(document.querySelectorAll('input[name="status[]"]:checked')).map(cb => cb.value);
+                    if (statuses.includes('all')) statuses = ['all'];
+
+                    const params = new URLSearchParams();
+                    if (selectYear !== 'allYear') {
+                        params.set('selectYear', selectYear);
+                    } else {
+                        const filterType = detectFilterType(startDate, endDate);
+                        params.set('filterType', filterType);
+                        if (filterType === 'custom') {
+                            params.set('startDate', startDate);
+                            params.set('endDate', endDate);
+                        }
+                    }
+
+                    if (selectClass && selectClass !== 'allClasses') params.set('selectClass', selectClass);
+                    statuses.forEach(s => params.append('status[]', s));
+
+                    const url = `/system-management/admin/api/dashboard.php?${params.toString()}`;
+                    console.log("Final URL:", url);
+
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error("API failed");
+                    const data = await res.json();
+                    updateUI(data);
+
+                    console.log(data);
+
+                    window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+
+                } catch (err) {
+                    console.error("Dashboard Load Error:", err);
+                } finally {
+                    loader.classList.remove('loading');
+                }
+            }
+
+            // ----------------------
+            // Checkbox logic
+            // ----------------------
+            const filterAll = document.getElementById('filterAll');
+            const otherCheckboxes = document.querySelectorAll('input[name="status[]"]:not(#filterAll)');
+
+            filterAll.addEventListener('change', () => otherCheckboxes.forEach(cb => cb.checked = filterAll.checked));
+
+            otherCheckboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    filterAll.checked = Array.from(otherCheckboxes).every(c => c.checked);
+                });
+            });
+
+            // ----------------------
+            // Debounced reload for filters
+            // ----------------------
+            let timer;
+
+            function debounceLoad() {
+                clearTimeout(timer);
+                timer = setTimeout(loadDashboard, 300);
+            }
+
+            document.querySelectorAll('#startDate, #endDate, #selectYear, #selectClass, input[name="status[]"]')
+                .forEach(el => el.addEventListener('change', debounceLoad));
+
+            // ----------------------
+            // Year/Class Change
+            // ----------------------
+            document.getElementById('selectYear').addEventListener('change', () => {
+                selectYear = document.getElementById('selectYear').value;
+                if (selectYear !== 'allYear') {
+                    fp.clear();
+                    startDate = endDate = '';
+                }
+                loadDashboard();
+            });
+
+            document.getElementById('selectClass').addEventListener('change', loadDashboard);
+
+            // ----------------------
+            // Init
+            // ----------------------
+            document.addEventListener('DOMContentLoaded', () => {
+                initCharts();
+                loadDashboard();
+            });
+        </script>
+
+    </body>
+
+    </html>

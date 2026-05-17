@@ -1,0 +1,55 @@
+<div>
+                                <form method="GET">
+                                    <div class="modal-body">
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="filterModal" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div style="width: 150px;" class="modal-content position-relative pe-1">
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Filter</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="status[]" value="filterAll" id="filterAll">
+                                                            <label class="form-check-label" for="filterAll">
+                                                                All
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="status[]" value="filterAttendences" id="Attendences">
+                                                            <label class="form-check-label" for="Attendences">
+                                                                Attendences
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="status[]" value="filterPayment" id="filterPayment">
+                                                            <label class="form-check-label" for="filterPayment">
+                                                                Payment
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="status[]" value="filterCourses" id="filterCourses">
+                                                            <label class="form-check-label" for="filterCourses">
+                                                                Courses
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="modal-footer w-100">
+                                                        <button type="submit" class="btn btn-primary w-100">Sumbit</button>
+                                                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
