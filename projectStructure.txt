@@ -1,0 +1,20 @@
+System-Academy/ 
+│── admin/ 
+        │── institute/
+            │── department.php
+            │── employees.php
+            │── teacher.php
+            │── student.php 
+        │── Attendance/ 
+            │── Attendance/
+        │── payment/ 
+            │── de.php 
+        │── admin/ 
+│── config/
+    │── db.php 
+│── teacher/
+│── student/
+│── auth/
+│── .env
+│── .htaccess        ← ROOT (this file #1)
+│── index.php    ← ENTRY POINT
