@@ -7,7 +7,7 @@ $password   = "";            // Your DB password
 $db         = "dbacademy_aa3x";   // Your DB name
 $port       = 5432;
 // Create connection
-$conn = new mysqli($servername, $username, $password, $db, (int)$port);
+$conn = new mysqli($servername, $username, $password, $db, $port);
 
 // Check connection
 if ($conn->connect_error) {
