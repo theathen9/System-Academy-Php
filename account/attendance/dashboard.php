@@ -15,6 +15,7 @@
     // include_once __DIR__ . '/api/dashboard.php';
     include_once __DIR__ . '/../../config/bootstrap.php';
     include_once __DIR__ . '/../../components/Navbar.php';
+    include_once __DIR__ . '/../../components/Avatar.php';
 
 
 
@@ -121,9 +122,14 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+        <script src="/system-management/src/assets/js/user-profile.js"></script>
 
 
         <style>
+            .page-title {
+                font-weight: 700;
+            }
+
             .dataLoading.loading {
                 opacity: 0.6;
                 pointer-events: none;
@@ -210,26 +216,11 @@
             <main class="col-10 bg-light">
                 <div
                     class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
+
                     <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                    <div class="dropdown">
-                        <!-- <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
-                            <div>Username</div>
-                        </button> -->
+                    <?php Avatar($_SESSION['role']); ?>
 
-                        <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                            <div id="username"></div>
-                        </button>
-
-                        <ul class="dropdown-menu bg-white ">
-                            <a href="../auth/signout.php" class="text-decoration-none">
-                                <li><button class="dropdown-item">Sign Out</button></li>
-                                <li><button class="dropdown-item">Account</button></li>
-                            </a>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="container-lg container-md container-sm p-3">
@@ -399,7 +390,7 @@
 
 
                                 <?php foreach ($cards as $c): ?>
-                                    <div class="col-md-3">
+                                    <div hidden class="col-md-3">
                                         <div class="card card-box">
                                             <div class="card-body d-flex justify-content-between align-items-center">
                                                 <div>
@@ -524,6 +515,7 @@
             </main>
         </div>
         <script src="../../script.js"></script>
+        <script src="<?= BASE_URL ?>/src/assets/js/navbar-toggle-action.js"></script>
 
         <script>
             let startDate = "<?= $startDate ?>";
@@ -531,25 +523,6 @@
             let selectYear = "<?= $selectedYear ?>";
             let selectClass = "<?= $selectedClass ?>";
             let selectTeacher = "<?= $selectTeacher  ?>";
-
-
-            fetch("http://localhost/system-management/api/v1/users.php", {
-                    credentials: "include"
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        document.querySelector("#username").innerText = data.data.username;
-
-                        const profileImg = data.data.profile_image ?
-                            "/system-management/uploads/photos/" + data.data.profile_image :
-                            "/system-management/src/assets/default-user.png";
-
-                        document.querySelector("#profileImg").src = profileImg;
-                    } else {
-                        console.log("Failed:", data);
-                    }
-                });
 
             // ----------------------
             // Flatpickr Setup
@@ -816,7 +789,7 @@
                 try {
 
                     const response = await fetch(
-                        `/system-management/api/v1/classes_by_teacher.php?teacher_id=${teacherId}`
+                        `${BASE_URL}/api/v1/classes_by_teacher.php?teacher_id=${teacherId}`
                     );
 
                     const data = await response.json();
@@ -949,7 +922,7 @@
 
                     params.set('status', statuses.join(','));
 
-                    const url = `/system-management/api/v1/dashboard.php?${params.toString()}`;
+                    const url = `${BASE_URL}/api/v1/dashboard.php?${params.toString()}`;
                     console.log("Final URL:", url);
 
                     const res = await fetch(url);
@@ -1080,7 +1053,7 @@
 
                     await loadDashboard();
 
-                }, 9000);
+                }, 5000);
             });
         </script>
 

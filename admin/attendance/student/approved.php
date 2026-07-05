@@ -3,15 +3,22 @@ date_default_timezone_set('Asia/Phnom_Penh');
 include_once __DIR__ . '/../../../data/dataSchema.php';
 include_once __DIR__ . '/../../../config/bootstrap.php';
 include_once __DIR__ . '/../../../components/Navbar.php';
+include_once __DIR__ . '/../../../components/Avatar.php';
+// include_once __DIR__ . '/../../../core/Cache.php';
+
 $userId = checkAuth();
 if (!$userId) {
     header("Location: " . BASE_URL . "/auth/signin.php");
     exit;
 }
 authorizeRole('admin');
+
+
 $routeAdmin[0]["active"] = false;
 $routeAdmin[4]["active"] = true;
 $routeAdmin[4]['submenu'][1]['active'] = true;
+
+
 $db = new DB($conn);
 $cache = new Cache();
 $studentCRUD     = new ORM($db, "tblStudents s");
@@ -181,7 +188,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../../src/style.css">
-
+    <script src="/system-management/src/assets/js/user-profile.js"></script>
+    <style>
+        .page-title {
+            font-weight: 700;
+        }
+    </style>
 </head>
 
 <body class="container-fluid p-0 overflow-x-hidden ">
@@ -196,24 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                <div class="dropdown">
-                    <!-- <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
-                            <div>Username</div>
-                        </button> -->
-
-                    <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                        <div id="username"></div>
-                    </button>
-
-                    <ul class="dropdown-menu bg-white ">
-                        <a href="../auth/signout.php" class="text-decoration-none">
-                            <li><button class="dropdown-item">Sign Out</button></li>
-                            <li><button class="dropdown-item">Account</button></li>
-                        </a>
-                    </ul>
-                </div>
+                <?php Avatar($_SESSION['role']); ?>
             </div>
 
             <div class="container-lg container-md container-sm p-3 vh-100">
@@ -430,12 +425,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     </div>
+    <script src="<?= BASE_URL ?>/src/assets/js/navbar-toggle-action.js"></script>
 
     <script>
         document.getElementById("searchStudent").addEventListener("keyup", function() {
             let search = this.value;
 
-            fetch("/System-Management/ajax/search_student.php", {
+            fetch("<?= BASE_URL ?>/ajax/search_student.php", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
@@ -491,27 +487,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         detailBtn.addEventListener("click", () => {
             if (!selectedId) return;
             window.location.href = "detail?type=student&id=" + selectedId;
-        });
-    </script>
-
-    <script>
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(menu) {
-
-            const icon = menu.querySelector(".submenu-icon");
-            const target = document.querySelector(menu.getAttribute("href"));
-
-            if (!icon || !target) return;
-
-            target.addEventListener("show.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-left");
-                icon.classList.add("bi-chevron-down");
-            });
-
-            target.addEventListener("hide.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-down");
-                icon.classList.add("bi-chevron-left");
-            });
-
         });
     </script>
 

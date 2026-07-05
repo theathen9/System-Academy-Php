@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../config/bootstrap.php';
 
 if (!isset($_COOKIE['refresh_token']) || empty($_COOKIE['refresh_token'])) {
     // echo json_encode(["error" => "Session expired"]);
-     http_response_code(401);
+    http_response_code(401);
     exit;
 }
 
@@ -27,12 +27,27 @@ SELECT
     u.username,
     u.email AS login_email,
     u.reference_type,
+    r.role_name,
 
     e.employee_id,
-    e.first_name_kh,
-    e.last_name_kh,
-    e.first_name_en,
-    e.last_name_en,
+    TRIM(CONCAT(
+    COALESCE(e.first_name_kh, ''),
+    ' ',
+    COALESCE(e.last_name_kh, '')
+)) AS full_name_kh,
+
+TRIM(CONCAT(
+    COALESCE(e.first_name_en, ''),
+    ' ',
+    COALESCE(e.last_name_en, '')
+)) AS full_name_en,
+ CASE 
+    WHEN e.first_name_kh IS NOT NULL AND e.first_name_kh != ''
+        THEN TRIM(CONCAT(e.first_name_kh, ' ', e.last_name_kh))
+    WHEN e.first_name_en IS NOT NULL AND e.first_name_en != ''
+        THEN TRIM(CONCAT(e.first_name_en, ' ', e.last_name_en))
+    ELSE u.username
+    END AS display_name,
     e.gender,
     e.phone1,
     e.phone2,
@@ -48,7 +63,8 @@ ON (
     u.reference_id = e.employee_id
     AND u.reference_type = 'Employee'
 )
-
+LEFT JOIN tblRoles r
+ON u.role_id = r.role_id
 WHERE u.user_id = ?
 LIMIT 1
 ";
@@ -63,7 +79,16 @@ $result = mysqli_stmt_get_result($stmt);
 
 $user = mysqli_fetch_assoc($result);
 
+// echo json_encode([
+//     "success" => true,
+//     "data" => $user
+// ]);
 echo json_encode([
     "success" => true,
-    "data" => $user
+    "data" => [
+        ...$user,
+        "display_name" => $user['full_name_kh']
+            ?? $user['full_name_en']
+            ?? $user['username']
+    ]
 ]);

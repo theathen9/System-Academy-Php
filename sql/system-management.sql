@@ -255,6 +255,8 @@ CREATE TABLE tblTimetables (
 
     class_id INT NOT NULL,
     day_id INT NOT NULL,
+    
+    status ENUM('Active','Inactive','Completed','Cancelled') DEFAULT 'Active',
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
@@ -310,59 +312,73 @@ CREATE TABLE tblScoreTypes (
     percentage DECIMAL(5,2) DEFAULT 0
 );
 
+CREATE TABLE tblExamTypes (
+    exam_type_id INT AUTO_INCREMENT PRIMARY KEY,
+    exam_type_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tblExams (
+    exam_id INT AUTO_INCREMENT PRIMARY KEY,
+    exam_name VARCHAR(100) NOT NULL,
+    
+    exam_type_id INT NOT NULL,
+    
+    class_id INT NOT NULL,
+    exam_date DATE NOT NULL,
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (class_id) REFERENCES tblClasses(class_id) ON DELETE CASCADE,
+
+    FOREIGN KEY (exam_type_id) REFERENCES tblExamTypes(exam_type_id) ON DELETE CASCADE        
+);
 
 
 CREATE TABLE tblScores (
     score_id INT AUTO_INCREMENT PRIMARY KEY,
 
     enrollment_id INT NOT NULL,
-
+    exam_id INT NOT NULL,
     score_type_id INT NOT NULL,
 
-    score DECIMAL(5,2) NOT NULL DEFAULT 0,
-
+    score DECIMAL(5,2) NOT NULL CHECK (score >= 0 AND score <= 100),
+    
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (exam_id) REFERENCES tblExams(exam_id) ON DELETE CASCADE,
 
-    FOREIGN KEY (enrollment_id)
-        REFERENCES tblEnrollments(enrollment_id)
-        ON DELETE CASCADE,
+	FOREIGN KEY (enrollment_id) REFERENCES tblEnrollments(enrollment_id) ON DELETE CASCADE,
 
-    FOREIGN KEY (score_type_id)
-        REFERENCES tblScoreTypes(score_type_id)
-        ON DELETE CASCADE,
-
-    CHECK (score >= 0 AND score <= 100),
-
-    INDEX idx_enrollment (enrollment_id),
-    INDEX idx_score_type (score_type_id)
+	FOREIGN KEY (score_type_id) REFERENCES tblScoreTypes(score_type_id) ON DELETE CASCADE,
+    
+   UNIQUE (enrollment_id,exam_id,score_type_id)
 );
 
 
 CREATE TABLE tblStudentResults (
     result_id INT AUTO_INCREMENT PRIMARY KEY,
-
+   exam_id INT NOT NULL,
     enrollment_id INT NOT NULL,
     class_id INT NOT NULL,
     academic_year VARCHAR(20) NOT NULL,
 
-    total_score DECIMAL(6,2) DEFAULT 0,
+    total_score DECIMAL(6,2) NOT NULL CHECK (total_score >= 0 AND total_score <= 100) DEFAULT 0 ,
     average_score DECIMAL(5,2) DEFAULT 0,
 
     grade_id INT NULL,
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (enrollment_id)
-        REFERENCES tblEnrollments(enrollment_id)
-        ON DELETE CASCADE,
+    FOREIGN KEY (enrollment_id) REFERENCES tblEnrollments(enrollment_id) ON DELETE CASCADE,
 
-    FOREIGN KEY (class_id)
-        REFERENCES tblClasses(class_id)
-        ON DELETE CASCADE,
+    FOREIGN KEY (class_id) REFERENCES tblClasses(class_id) ON DELETE CASCADE,
 
-    FOREIGN KEY (grade_id)
-        REFERENCES tblGrade(grade_id)
-        ON DELETE SET NULL
+    FOREIGN KEY (grade_id) REFERENCES tblGrade(grade_id) ON DELETE SET NULL,
+    FOREIGN KEY (exam_id) REFERENCES tblExams(exam_id) ON DELETE CASCADE
+
 );
 
 

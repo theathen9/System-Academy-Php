@@ -1,9 +1,23 @@
 <?php
 
 include_once __DIR__ . "/../../config/bootstrap.php";
-include_once __DIR__ . "/../../data/dataSchema.php";
+include_once __DIR__ . '/../../data/dataSchema.php';
 include_once __DIR__ . "/../../components/Navbar.php";
+include_once __DIR__ . "/../../components/Avatar.php";
 
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+
+$userId = checkAuth();
+
+if (!$userId) {
+    header("Location: " . BASE_URL . "/auth/signin.php");
+    exit;
+}
+
+authorizeRole('admin');
 
 // Active menu
 $routeAdmin[0]["active"] = false;
@@ -23,6 +37,11 @@ $roomCRUD = new ORM($db, "tblRooms", "room_id");
 
 // 3️⃣ Fetch courses for the dropdown
 $courses = $conn->query("SELECT * FROM tblCourses ORDER BY course_name ASC");
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$limit = 10;
+$totalPages = null;
+$page = max(1, min($totalPages, $page));
 
 ?>
 <!DOCTYPE html>
@@ -43,7 +62,12 @@ $courses = $conn->query("SELECT * FROM tblCourses ORDER BY course_name ASC");
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../src/style.css">
-
+    <script src="/system-management/src/assets/js/user-profile.js"></script>
+    <style>
+        .page-title {
+            font-weight: 700;
+        }
+    </style>
 </head>
 
 <body class="container-fluid p-0 overflow-x-hidden">
@@ -59,24 +83,8 @@ $courses = $conn->query("SELECT * FROM tblCourses ORDER BY course_name ASC");
 
                 <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                <div class="dropdown">
-                    <!-- <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
-                            <div>Username</div>
-                        </button> -->
+                <?php Avatar($_SESSION['role']); ?>
 
-                    <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                        <div id="username"></div>
-                    </button>
-
-                    <ul class="dropdown-menu bg-white ">
-                        <a href="../auth/signout.php" class="text-decoration-none">
-                            <li><button class="dropdown-item">Sign Out</button></li>
-                            <li><button class="dropdown-item">Account</button></li>
-                        </a>
-                    </ul>
-                </div>
             </div>
 
             <div class="w-100 d-flex mt-3 justify-content-between gap-3 flex-wrap">
@@ -264,7 +272,7 @@ $courses = $conn->query("SELECT * FROM tblCourses ORDER BY course_name ASC");
 
                                 <!--  -->
                                 <?php if (!empty($data)): ?>
-                                    <?php foreach($data as $key => $row): ?>
+                                    <?php foreach ($data as $key => $row): ?>
                                         <tr data-id="<?= $row['enrollment_id'] ?>"
                                             data-code="<?= htmlspecialchars($row['enrollment_code']) ?>"
                                             data-name="<?= htmlspecialchars($row['enrollment_name']) ?>"
@@ -329,43 +337,8 @@ $courses = $conn->query("SELECT * FROM tblCourses ORDER BY course_name ASC");
         </main>
     </div>
 
-    <script>
-        fetch("http://localhost/system-management/api/v1/users.php", {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector("#username").innerText = data.data.username;
-
-                    document.querySelector("#profileImg").src =
-                        "http://localhost/system-management/uploads/photos/" +
-                        data.data.profile_image;
-                } else {
-                    console.log("Failed:", data);
-                }
-            });
-
-
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(menu) {
-
-            const icon = menu.querySelector(".submenu-icon");
-            const target = document.querySelector(menu.getAttribute("href"));
-
-            if (!icon || !target) return;
-
-            target.addEventListener("show.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-left");
-                icon.classList.add("bi-chevron-down");
-            });
-
-            target.addEventListener("hide.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-down");
-                icon.classList.add("bi-chevron-left");
-            });
-
-        });
-    </script>
+    <script src="<?= BASE_URL ?>/src/assets/js/navbar-toggle-action.js"></script>
+   
     <script>
         document.getElementById("searchStudent").addEventListener("keyup", function() {
             let search = this.value;

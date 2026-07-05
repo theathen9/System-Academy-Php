@@ -42,6 +42,7 @@ function checkAuth()
     FROM tblUsers u
     JOIN tblRoles r ON r.role_id = u.role_id
     WHERE u.user_id = ?
+    AND u.status = 1
     LIMIT 1
     ");
 
@@ -249,6 +250,13 @@ function verifyUserCookie()
     //     'samesite' => 'Lax' // safer for dev
     // ];
 
+    setcookie("c_user", $cookieValue, [
+        'expires' => strtotime('+1 days'),
+        'path' => '/',
+        'secure' => $isSecure,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
     setcookie("access_token", $newAccessToken, [
         'expires' => strtotime($newAccessExpiry),
         'path' => '/',

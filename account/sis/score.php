@@ -104,6 +104,8 @@ $totalPages = ceil($totalEmployees / $limit);
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../src/style.css">
+        <script src="/system-management/src/assets/js/user-profile.js"></script>
+
     <style>
         .table-custom th:nth-child(1),
         .table-custom td:nth-child(1) {
@@ -146,7 +148,7 @@ $totalPages = ceil($totalEmployees / $limit);
     <div class="row g-3">
 
         <?php Navbar($infoSchemaData, $routeAdmin); ?>
-       
+
 
         <!-- Main area -->
         <main class="col-lg-10 col-sm-12 bg-light">
@@ -257,13 +259,13 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                                         ? htmlspecialchars($row['first_name_kh']) . ' ' . htmlspecialchars($row['last_name_kh'])
                                                         : 'N/A' ?>
                                                 </td>
-                                                
+
                                                 <td>
                                                     <?= !empty($row['first_name_en'] && $row['last_name_en'])
                                                         ? htmlspecialchars($row['first_name_en']) . ' ' . htmlspecialchars($row['last_name_en'])
                                                         : 'N/A' ?>
                                                 </td>
-                                                
+
                                                 <td><?= htmlspecialchars($row['gender'] ?? 'N/A') ?></td>
                                                 <td><?= htmlspecialchars($row['dob'] ?? 'N/A') ?></td>
                                                 <td>
@@ -274,7 +276,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                                 </td>
                                                 <td>
                                                     <?= !empty($row['curr_addr_village'] && $row['curr_addr_village'])
-                                                        ? htmlspecialchars($row['curr_addr_village']) . ', ' . htmlspecialchars($row['curr_addr_commune']). ', ' . htmlspecialchars($row['curr_addr_province'])
+                                                        ? htmlspecialchars($row['curr_addr_village']) . ', ' . htmlspecialchars($row['curr_addr_commune']) . ', ' . htmlspecialchars($row['curr_addr_province'])
                                                         : 'N/A' ?>
                                                 </td>
                                             </tr>
@@ -346,6 +348,7 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
         });
     </script>
     <script>
+
         let selectedId = null;
 
         const tableBody = document.getElementById("studentTable");

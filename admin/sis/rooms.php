@@ -161,6 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../src/style.css">
+        <script src="/system-management/src/assets/js/user-profile.js"></script>
 
 </head>
 
@@ -430,23 +431,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="../../script.js"></script>
 
     <script>
-        fetch("http://localhost/system-management/api/v1/users.php", {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector("#username").innerText = data.data.username;
-
-                    const profileImg = data.data.profile_image ?
-                        "/system-management/uploads/photos/" + data.data.profile_image :
-                        "/system-management/src/assets/default-user.png";
-
-                    document.querySelector("#profileImg").src = profileImg;
-                } else {
-                    console.log("Failed:", data);
-                }
-            });
+       
 
         let selectedRow = null;
         let selectedId = null;

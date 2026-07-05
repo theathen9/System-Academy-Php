@@ -6,6 +6,7 @@ include_once __DIR__ . '/../../config/db.php';
 include_once __DIR__ . '/../../config/bootstrap.php';
 require_once __DIR__ . '/../../data/dataSchema.php';
 require_once __DIR__ . '/../../components/Navbar.php';
+require_once __DIR__ . '/../../components/Avatar.php';
 
 
 // include_once "/config/db.php";
@@ -111,6 +112,12 @@ $totalPages = ceil($totalTeachers / $limit);
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../src/style.css">
+    <script src="/system-management/src/assets/js/user-profile.js"></script>
+    <style>
+        .page-title {
+            font-weight: 700;
+        }
+    </style>
 
 </head>
 
@@ -126,20 +133,8 @@ $totalPages = ceil($totalTeachers / $limit);
                 class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
                 <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                <div class="dropdown">
-                    <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                        <div id="username"></div>
-                    </button>
+                <?php Avatar($_SESSION['role']); ?>
 
-
-                    <ul class="dropdown-menu bg-white">
-                        <a href="../auth/signout.php" class="text-decoration-none">
-                            <li><button class="dropdown-item">Sign Out</button></li>
-                            <li><button class="dropdown-item">Account</button></li>
-                        </a>
-                    </ul>
-                </div>
             </div>
 
             <div class="p-3">
@@ -260,22 +255,19 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                         <!-- Pagination -->
                         <div class="d-flex justify-content-center align-items-center mt-3 gap-2">
                             <form method="GET" class="d-flex gap-2">
+
+                                <!-- Preserve search -->
                                 <input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
 
-                                <!-- Prev -->
+                                <!-- Previous -->
                                 <?php if ($page > 1): ?>
                                     <button type="submit" name="page" value="<?= $page - 1 ?>" class="btn btn-outline-primary">
                                         ⬅ Prev
                                     </button>
                                 <?php endif; ?>
 
-                                <!-- Page Numbers (limit display) -->
-                                <?php
-                                $start = max(1, $page - 2);
-                                $end = min($totalPages, $page + 2);
-                                ?>
-
-                                <?php for ($i = $start; $i <= $end; $i++): ?>
+                                <!-- Page numbers -->
+                                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                                     <button type="submit" name="page" value="<?= $i ?>"
                                         class="btn <?= $i == $page ? 'btn-primary' : 'btn-outline-primary' ?>">
                                         <?= $i ?>
@@ -288,114 +280,78 @@ background: linear-gradient(139deg, rgba(0, 109, 156, 1) 32%, rgba(0, 109, 156, 
                                         Next ➡
                                     </button>
                                 <?php endif; ?>
+
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+        </main>
+    </div>
+    
+    <script src="<?= BASE_URL ?>/src/assets/js/navbar-toggle-action.js"></script>
 
+    <script>
+        document.getElementById("searchTeacher").addEventListener("keyup", function() {
+            let search = this.value;
 
-            <script>
-                 fetch("http://localhost/system-management/api/v1/users.php", {
-                    credentials: "include"
+            fetch("<?= BASE_URL ?>/ajax/search_teachers.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "search=" + encodeURIComponent(search)
                 })
-                .then(res => res.json())
+                .then(res => res.text())
                 .then(data => {
-                    if (data.success) {
-                        document.querySelector("#username").innerText = data.data.username;
+                    document.getElementById("teacherTable").innerHTML = data;
 
-                        const profileImg = data.data.profile_image ?
-                            "/system-management/uploads/photos/" + data.data.profile_image :
-                            "/system-management/src/assets/default-user.png";
-
-                        document.querySelector("#profileImg").src = profileImg;
-                    } else {
-                        console.log("Failed:", data);
-                    }
+                    selectedId = null;
+                    editBtn.disabled = true;
+                    detailBtn.disabled = true;
                 });
+        });
+    </script>
+    <script>
+        let selectedId = null;
 
-                document.getElementById("searchTeacher").addEventListener("keyup", function() {
-                    let search = this.value;
+        const tableBody = document.getElementById("teacherTable");
+        const editBtn = document.getElementById("editBtn");
+        const detailBtn = document.getElementById("detailBtn");
 
-                    fetch("/System-Management/ajax/search_teachers.php", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            },
-                            body: "search=" + encodeURIComponent(search)
-                        })
-                        .then(res => res.text())
-                        .then(data => {
-                            document.getElementById("teacherTable").innerHTML = data;
+        tableBody.addEventListener("click", function(e) {
+            const row = e.target.closest("tr");
+            if (!row) return;
+            console.dir(e.target);
+            console.dir(e.target.closest);
 
-                            selectedId = null;
-                            editBtn.disabled = true;
-                            detailBtn.disabled = true;
-                        });
-                });
-            </script>
-            <script>
-                let selectedId = null;
+            // Remove highlight from all rows
+            document.querySelectorAll("#teacherTable tr")
+                .forEach(r => r.classList.remove("table-active"));
 
-                const tableBody = document.getElementById("teacherTable");
-                const editBtn = document.getElementById("editBtn");
-                const detailBtn = document.getElementById("detailBtn");
+            // Highlight clicked row
+            row.classList.add("table-active");
 
-                tableBody.addEventListener("click", function(e) {
-                    const row = e.target.closest("tr");
-                    if (!row) return;
-                    console.dir(e.target);
-                    console.dir(e.target.closest);
+            // Store ID
+            selectedId = row.dataset.id;
 
-                    // Remove highlight from all rows
-                    document.querySelectorAll("#teacherTable tr")
-                        .forEach(r => r.classList.remove("table-active"));
+            // Enable buttons
+            editBtn.disabled = false;
+            detailBtn.disabled = false;
 
-                    // Highlight clicked row
-                    row.classList.add("table-active");
+            console.log("Selected ID:", selectedId);
+        });
 
-                    // Store ID
-                    selectedId = row.dataset.id;
+        editBtn.addEventListener("click", () => {
+            if (!selectedId) return;
+            window.location.href = "edit?type=teacher&id=" + selectedId;
+        });
 
-                    // Enable buttons
-                    editBtn.disabled = false;
-                    detailBtn.disabled = false;
-
-                    console.log("Selected ID:", selectedId);
-                });
-
-                editBtn.addEventListener("click", () => {
-                    if (!selectedId) return;
-                    window.location.href = "edit?type=teacher&id=" + selectedId;
-                });
-
-                detailBtn.addEventListener("click", () => {
-                    if (!selectedId) return;
-                    window.location.href = "detail?type=teacher&id=" + selectedId;
-                });
-            </script>
-
-
-            <script>
-                document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(menu) {
-
-                    const icon = menu.querySelector(".submenu-icon");
-                    const target = document.querySelector(menu.getAttribute("href"));
-
-                    if (!icon || !target) return;
-
-                    target.addEventListener("show.bs.collapse", function() {
-                        icon.classList.remove("bi-chevron-left");
-                        icon.classList.add("bi-chevron-down");
-                    });
-
-                    target.addEventListener("hide.bs.collapse", function() {
-                        icon.classList.remove("bi-chevron-down");
-                        icon.classList.add("bi-chevron-left");
-                    });
-
-                });
-            </script>
+        detailBtn.addEventListener("click", () => {
+            if (!selectedId) return;
+            window.location.href = "detail?type=teacher&id=" + selectedId;
+        });
+    </script>
 </body>
 
 </html>

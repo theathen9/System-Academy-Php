@@ -68,9 +68,9 @@ $result = $roomCRUD->get($limit, $offset, $search);
 
 
 // include_once "/config/db.php";
-$routeAccount[0]["active"] = false;
-$routeAccount[2]["active"] = true;
-$routeAccount[2]['submenu'][1]['active'] = true;
+$routeAdmin[0]["active"] = false;
+$routeAdmin[2]["active"] = true;
+$routeAdmin[2]['submenu'][1]['active'] = true;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -161,19 +161,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../src/style.css">
+        <script src="/system-management/src/assets/js/user-profile.js"></script>
 
 </head>
 
 <body class="container-fluid p-0 overflow-x-hidden">
     <div class="row g-3">
 
-        <?php Navbar($infoSchemaData, $routeAccount); ?>
+        <?php Navbar($infoSchemaData, $routeAdmin); ?>
 
 
         <!-- Main area -->
         <main class="col-lg-10 bg-light">
             <div
                 class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
+
                 <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
                 <div class="dropdown">
@@ -195,7 +197,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </ul>
                 </div>
             </div>
-
 
             <div class="container-lg container-md container-sm p-3 m-0">
                 <div class="w-100 d-flex mt-3 justify-content-between gap-3 flex-wrap">
@@ -430,21 +431,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="../../script.js"></script>
 
     <script>
-        fetch("http://localhost/system-management/api/v1/users.php", {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector("#username").innerText = data.data.username;
+       
 
-                    document.querySelector("#profileImg").src =
-                        "http://localhost/system-management/uploads/photos/" +
-                        data.data.profile_image;
-                } else {
-                    console.log("Failed:", data);
-                }
-            });
         let selectedRow = null;
         let selectedId = null;
 

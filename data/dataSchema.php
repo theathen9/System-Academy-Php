@@ -124,7 +124,7 @@ $routeAdmin = [
         "submenu" => [
             [
                 "title" => "Schedule",
-                "link" => BASE_URL . "/admin/schedule/dashboard",
+                "link" => BASE_URL . "/admin/schedule/index",
                 "active" => false
             ]
         ]
@@ -142,18 +142,8 @@ $routeAdmin = [
         "submenu_id" => "reportSubmenu",
         "submenu" => [
             [
-                "title" => "Schedule",
-                "link" => BASE_URL . "/admin/schedule/dashboard",
-                "active" => false
-            ],
-            [
-                "title" => "Attendance",
-                "link" => BASE_URL . "/admin/attendance/dashboard",
-                "active" => false
-            ],
-            [
-                "title" => "Examination",
-                "link" => BASE_URL . "/admin/examination/results",
+                "title" => "Dashboard",
+                "link" => BASE_URL . "/admin/report/index",
                 "active" => false
             ]
         ],
@@ -274,7 +264,7 @@ $routeAccount = [
         "submenu" => [
             [
                 "title" => "Schedule",
-                "link" => BASE_URL . "/account/schedule/dashboard",
+                "link" => BASE_URL . "/account/schedule/index",
                 "active" => false
             ]
         ]
@@ -293,7 +283,7 @@ $routeAccount = [
         "submenu" => [
             [
                 "title" => "Schedule",
-                "link" => BASE_URL . "/account/schedule/dashboard",
+                "link" => BASE_URL . "/account/schedule/index",
                 "active" => false
             ],
             [
@@ -366,25 +356,82 @@ $routeTeacher = [
     ]
 ];
 
-$currentPage = $currentPage ?? '';
-$queryString = $queryString ?? '';
-// $editFolder = $editFolder ?? '';
-$editFolder = "";
 
-$ESchemaData = [
+//  ./data/dataSchema.php
+$type = $_GET['type'] ?? null;
+$id   = $_GET['id'] ?? null;
+
+$id = (int) $id;
+$basePath =BASE_INSTITUTE;
+$currentPage = $currentPage ?? '';
+
+$queryString = "?type={$type}&id={$id}";
+
+
+$staffSchemaData = [
     [
         "title"  => "Detail",
-        "link"   => "./detail{$queryString}",
+        "link"   => $basePath . "/detail" . $queryString,
         "active" => $currentPage === 'detail'
     ],
     [
         "title"  => "Edit",
-        "link"   => "./edit{$queryString}",
+        "link"   => $basePath . "/edit" . $queryString,
+        "active" => $currentPage === 'edit'
+    ],
+    [
+        "title"  => "Schedule",
+        "link"   => $basePath . "/schedule" . $queryString,
+        "active" => $currentPage === 'schedule'
+    ],
+    [
+        "title"  => "Attendance",
+        "link"   => $basePath . "/attendance" . $queryString,
+        "active" => $currentPage === 'attendance'
+    ],
+    [
+        "title"  => "Payroll",
+        "link"   => $basePath . "/payroll" . $queryString,
+        "active" => $currentPage === 'payroll'
+    ],
+    [
+        "title"  => "Leave",
+        "link"   => $basePath . "/leave" . $queryString,
+        "active" => $currentPage === 'leave'
+    ],
+];
+
+$studentSchemaData = [
+    [
+        "title"  => "Detail",
+        "link"   => $basePath . "/detail" . $queryString,
+        "active" => $currentPage === 'detail'
+    ],
+    [
+        "title"  => "Edit",
+        "link"   => $basePath . "/edit" . $queryString,
         "active" => $currentPage === 'edit'
     ],
     [
         "title"  => "Course",
-        "link"   => "./course{$queryString}",
+        "link"   => $basePath . "/course" . $queryString,
         "active" => $currentPage === 'course'
     ],
+    [
+        "title"  => "Attendance",
+        "link"   => $basePath . "/attendance" . $queryString,
+        "active" => $currentPage === 'attendance'
+    ],
+    [
+        "title"  => "Invoice",
+        "link"   => $basePath . "/invoice" . $queryString,
+        "active" => $currentPage === 'invoice'
+    ],
+    [
+        "title"  => "Result",
+        "link"   => $basePath . "/result" . $queryString,
+        "active" => $currentPage === 'result'
+    ],
 ];
+
+

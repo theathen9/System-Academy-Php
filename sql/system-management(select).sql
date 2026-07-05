@@ -6,6 +6,103 @@ JOIN tblPermissions p ON rp.permission_id = p.permission_id
 WHERE u.user_id = 1;
 
 
+SHOW CREATE TABLE tblstudentresults;
+
+
+SELECT
+    c.class_name,
+    MIN(d.sort_order) AS start_day,
+    MAX(d.sort_order) AS end_day
+FROM tblTimetables t
+JOIN tblClasses c ON c.class_id = t.class_id
+JOIN tblDays d ON d.day_id = t.day_id
+GROUP BY c.class_id;
+
+
+SELECT
+    c.class_id,
+    c.class_name,
+    c.class_code,
+    s.subject_name,
+    CONCAT(emp.first_name_en, ' ', emp.last_name_en) AS teacher_name,
+    r.room_name,
+    'Mon - Fri' AS days,
+    ts.start_time,
+    ts.end_time
+FROM tblClasses c
+JOIN tblCourseSubjects cs ON cs.id = c.course_subject_id
+JOIN tblSubjects s ON s.subject_id = cs.subject_id
+JOIN tblEmployees emp ON emp.employee_id = c.teacher_id
+JOIN tblRooms r ON r.room_id = c.room_id
+JOIN tblTimeSlots ts ON ts.slot_id = c.slot_id;
+
+
+SELECT * FROM tblExams
+WHERE exam_type_id = 1
+AND class_id = 2
+AND exam_date = '2026-05-30';
+
+
+SELECT 
+    e.exam_id,
+    e.exam_name,
+    e.exam_date,
+    et.exam_type_name,
+    e.class_id
+FROM tblExams e
+JOIN tblExamTypes et ON et.exam_type_id = e.exam_type_id;
+
+
+
+SELECT 
+    e.exam_id,
+    e.exam_name,
+    e.exam_date,
+
+    et.exam_type_name,
+
+    s.score_id,
+    s.score,
+
+    st.score_type_name,
+    st.percentage,
+
+    s.enrollment_id
+FROM tblScores s
+
+JOIN tblExams e ON e.exam_id = s.exam_id
+JOIN tblExamTypes et ON et.exam_type_id = e.exam_type_id
+JOIN tblScoreTypes st ON st.score_type_id = s.score_type_id;
+
+
+SELECT 
+    e.exam_id,
+    e.exam_name,
+    e.exam_date,
+    et.exam_type_name,
+    e.class_id,
+
+    s.score_id,
+    s.score,
+
+    st.score_type_name,
+    st.percentage,
+
+    en.enrollment_id,
+    stus.student_id,
+    CONCAT(stus.first_name_kh, ' ', stus.last_name_kh) AS student_name
+
+FROM tblScores s
+
+JOIN tblExams e ON e.exam_id = s.exam_id
+JOIN tblExamTypes et ON et.exam_type_id = e.exam_type_id
+JOIN tblScoreTypes st ON st.score_type_id = s.score_type_id
+
+JOIN tblEnrollments en ON en.enrollment_id = s.enrollment_id
+JOIN tblStudents stus ON stus.student_id = en.student_id
+
+WHERE 1=1
+
 SELECT 
     emp.*,
    -- GROUP_CONCAT(DISTINCT c.course_name SEPARATOR ', ') AS courses,
@@ -404,6 +501,51 @@ FROM tblDepartments
 WHERE department_name = 'teacher';
 
 -------- 2. Auto Invoice + Payment Status Logic ---------
+
+
+
+-------- 2. Auto Invoice + Payment Status Logic ---------
+
+SELECT
+    c.class_id,
+    c.class_code,
+    c.class_name,
+    CONCAT(e.first_name_en, ' ', e.last_name_en) AS teacher_name,
+    COUNT(en.student_id) AS total_students,
+    c.max_students,
+    (c.max_students - COUNT(en.student_id)) AS available_seats,
+    c.status
+FROM tblClasses c
+INNER JOIN tblEmployees e
+    ON e.employee_id = c.teacher_id
+LEFT JOIN tblEnrollments en
+    ON en.class_id = c.class_id
+    AND en.status = 'active'
+WHERE c.teacher_id = 10
+GROUP BY
+    c.class_id,
+    c.class_code,
+    c.class_name,
+    teacher_name,
+    c.max_students,
+    c.status
+ORDER BY c.class_name;
+
+
+
+SELECT
+    d.department_id,
+    d.department_name,
+    COUNT(e.employee_id) AS total_teachers
+FROM tblDepartments d
+LEFT JOIN tblEmployees e
+    ON e.department_id = d.department_id
+    AND e.employee_type = 'Teacher'
+GROUP BY
+    d.department_id,
+    d.department_name
+ORDER BY
+    d.department_name;
 
 
 

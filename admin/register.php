@@ -14,12 +14,16 @@ if (session_status() === PHP_SESSION_NONE) {
 // include_once __DIR__ . '/../core/DB.php';
 // include_once __DIR__ . '/../../core/CRUD.php';
 // include_once __DIR__ . '/../core/ORM.php';
-include_once __DIR__ . '/../components/Navbar.php';
+
 include_once __DIR__ . '/../data/dbSchemaData.php';
 include_once __DIR__ . '/../data/functionData.php';
-include_once __DIR__ . '/../data/register_staff.php';
-include_once __DIR__ . '/../data/register_student.php';
 include_once __DIR__ . '/../config/bootstrap.php';
+include_once __DIR__ . '/../components/Navbar.php';
+include_once __DIR__ . '/../components/Avatar.php';
+include_once __DIR__ . '/../components/RegisterStaff.php';
+include_once __DIR__ . '/../components/RegisterStudent.php';
+// include_once __DIR__ . '/../data/register_student.php';
+// include_once __DIR__ . '/../data/register_staff.php';
 
 
 // include_once __DIR__ . '/api/dashboard.php';
@@ -38,6 +42,7 @@ if (!$userId) {
 }
 
 authorizeRole('admin');
+
 
 // var_dump($_SESSION);
 // var_dump($_COOKIE);
@@ -59,8 +64,9 @@ $step = $_POST['step'] ?? null;
 
 $db = new DB($conn);
 $studentCRUD = new ORM($db, "tblStudents", "student_id");
-$classCRUD = new ORM($db, "tblClasses", "class_id");
 $teacherCRUD = new ORM($db, "tblEmployees", "employee_id");
+$employeeCRUD = new ORM($db, "tblEmployees", "employee_id");
+$classCRUD = new ORM($db, "tblClasses", "class_id");
 $courseCRUD = new ORM($db, "tblCourses", "course_id");
 $subjectCRUD = new ORM($db, "tblSubjects", "subject_id");
 $courseSubjectCRUD = new ORM($db, "tblCourseSubjects", "id");
@@ -71,7 +77,7 @@ $paymentMethodsCRUD = new ORM($db, "tblPaymentMethods", "method_id");
 
 
 $getClass = $classCRUD->get("*", "", [], "", 100, 0);
-$paymentMethods = $paymentMethodsCRUD->get("*", "", [], "", 100, 0);
+$paymentMethods = $paymentMethodsCRUD->get("*", "", [], "", 10, 0);
 
 
 $res = $studentCRUD
@@ -81,6 +87,15 @@ $res = $studentCRUD
 
 $lastId = $res['student_id'] ?? 0;
 $idCode = $lastId + 1;
+
+$resS = $employeeCRUD
+    ->select('employee_id')
+    ->orderBy('employee_id', 'DESC')
+    ->first();
+
+$lastIdS = $resS['employee_id'] ?? 0;
+$idCodeStaff = $lastIdS + 1;
+
 
 
 $classes = [];
@@ -205,11 +220,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../src/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="../src/assets/js/user-profile.js" defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         .progress-bar {
             transition: width 0.4s ease;
+        }
+
+        .page-title {
+            font-weight: 700;
         }
     </style>
 
@@ -227,19 +247,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
                 <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                <div class="dropdown">
-                    <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                        <div id="username"></div>
-                    </button>
+                <?php Avatar($_SESSION['role']); ?>
 
-                    <ul class="dropdown-menu bg-white">
-                        <a href=<?= BASE_URL . "/auth/signout.php" ?> class="text-decoration-none">
-                            <li><button class="dropdown-item">Sign Out</button></li>
-                            <li><button class="dropdown-item">Account</button></li>
-                        </a>
-                    </ul>
-                </div>
             </div>
 
             <!-- form -->
@@ -265,7 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?= csrf_field(); ?>
 
                                 <input type="hidden" name="created_by" value="<?= $_SESSION['reference_id'] ?? '' ?>">
-                                <?php register_staff($conn, $idCode); ?>
+                                <?php register_staff($conn, $idCodeStaff); ?>
                             </form>
                         </div>
 
@@ -294,23 +303,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </main>
     </div>
+    <script src="../src/assets/js/navbar-toggle-action.js"></script>
 
     <script>
-        fetch("http://localhost/system-management/api/v1/users.php", {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector("#username").innerText = data.data.username;
-
-                    document.querySelector("#profileImg").src =
-                        "http://localhost/system-management/uploads/photos/" +
-                        data.data.profile_image;
-                } else {
-                    console.log("Failed:", data);
-                }
-            });
         document.getElementById("student_photo").addEventListener("change", function() {
 
             const file = this.files[0];

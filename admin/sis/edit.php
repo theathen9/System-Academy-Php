@@ -57,6 +57,8 @@ if ($type == "teacher") {
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../src/style.css">
+        <script src="/system-management/src/assets/js/user-profile.js"></script>
+
 </head>
 
 <body class="container-fluid p-0 ">

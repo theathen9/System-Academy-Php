@@ -2,19 +2,17 @@
 // ./admin/institute/employees.php
 date_default_timezone_set('Asia/Phnom_Penh');
 
-include_once __DIR__ . '/../../config/db.php';
-include_once __DIR__ . '/../../core/DB.php';
-include_once __DIR__ . '/../../core/CRUD.php';
-include_once __DIR__ . '/../../core/ORM.php';
+include_once __DIR__ . '/../../config/bootstrap.php';
+// include_once __DIR__ . '/../../core/DB.php';
+// include_once __DIR__ . '/../../core/CRUD.php';
+// include_once __DIR__ . '/../../core/ORM.php';
 include_once __DIR__ . '/../../core/Cache.php';
 include_once __DIR__ . '/../../core/Logger.php';
-require_once __DIR__ . '/../../auth/auth.php';
+// require_once __DIR__ . '/../../auth/auth.php';
 include_once __DIR__ . '/../../data/dbSchemaData.php';
 require_once __DIR__ . '/../../data/dataSchema.php';
 include_once __DIR__ . '/../../components/Navbar.php';
-
-
-
+include_once __DIR__ . '/../../components/Avatar.php';
 
 
 $userId = checkAuth();
@@ -96,7 +94,7 @@ $countData = $countORM
         "e.phone2",
         "d.department_name"
     ])
-    ->get();
+    ->first();
 
 $totalEmployees = $countData['total'] ?? 0;
 $totalPages = ceil($totalEmployees / $limit);
@@ -133,6 +131,8 @@ $log->sql("SELECT * FROM tblEmployees WHERE id = ?", [10]);
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="../../src/style.css">
+    <script src=<?= BASE_URL . "/src/assets/js/user-profile.js" ?> defer></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         .table-custom th:nth-child(1),
         .table-custom td:nth-child(1) {
@@ -173,6 +173,10 @@ $log->sql("SELECT * FROM tblEmployees WHERE id = ?", [10]);
         .table-custom td:nth-child(8) {
             width: 180px;
         }
+
+        .page-title {
+            font-weight: 700;
+        }
     </style>
 </head>
 
@@ -185,17 +189,11 @@ $log->sql("SELECT * FROM tblEmployees WHERE id = ?", [10]);
         <main class="col-10 bg-light">
             <div class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
                 <div class="title">Welcome to <?= htmlspecialchars($infoSchemaData[0]["name"]) ?></div>
-                <div class="dropdown">
-                    <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                        <div id="username"></div>
-                    </button>
-                    <ul class="dropdown-menu bg-white">
-                        <li><a href="../auth/signout.php" class="dropdown-item">Sign Out</a></li>
-                        <li><a href="#" class="dropdown-item">Account</a></li>
-                    </ul>
-                </div>
+
+                <?php Avatar($_SESSION['role']); ?>
+
             </div>
+
 
             <div class="container-lg p-3">
                 <div class="w-100 bg-white shadow px-4 py-3 rounded">
@@ -287,22 +285,19 @@ $log->sql("SELECT * FROM tblEmployees WHERE id = ?", [10]);
                     <!-- Pagination -->
                     <div class="d-flex justify-content-center align-items-center mt-3 gap-2">
                         <form method="GET" class="d-flex gap-2">
+
+                            <!-- Preserve search -->
                             <input type="hidden" name="search" value="<?= htmlspecialchars($search) ?>">
 
-                            <!-- Prev -->
+                            <!-- Previous -->
                             <?php if ($page > 1): ?>
                                 <button type="submit" name="page" value="<?= $page - 1 ?>" class="btn btn-outline-primary">
                                     ⬅ Prev
                                 </button>
                             <?php endif; ?>
 
-                            <!-- Page Numbers (limit display) -->
-                            <?php
-                            $start = max(1, $page - 2);
-                            $end = min($totalPages, $page + 2);
-                            ?>
-
-                            <?php for ($i = $start; $i <= $end; $i++): ?>
+                            <!-- Page numbers -->
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                                 <button type="submit" name="page" value="<?= $i ?>"
                                     class="btn <?= $i == $page ? 'btn-primary' : 'btn-outline-primary' ?>">
                                     <?= $i ?>
@@ -315,6 +310,7 @@ $log->sql("SELECT * FROM tblEmployees WHERE id = ?", [10]);
                                     Next ➡
                                 </button>
                             <?php endif; ?>
+
                         </form>
                     </div>
                 </div>
@@ -322,26 +318,10 @@ $log->sql("SELECT * FROM tblEmployees WHERE id = ?", [10]);
         </main>
     </div>
 
+    <script src="<?= BASE_URL ?>/src/assets/js/navbar-toggle-action.js"></script>
+
+
     <script>
-        fetch("http://localhost/system-management/api/v1/users.php", {
-                    credentials: "include"
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        document.querySelector("#username").innerText = data.data.username;
-
-                        const profileImg = data.data.profile_image ?
-                            "/system-management/uploads/photos/" + data.data.profile_image :
-                            "/system-management/src/assets/default-user.png";
-
-                        document.querySelector("#profileImg").src = profileImg;
-                    } else {
-                        console.log("Failed:", data);
-                    }
-                });
-
-
         let selectedId = null;
         const tableBody = document.getElementById("employeeTable");
         const editBtn = document.getElementById("editBtn");
@@ -366,22 +346,8 @@ $log->sql("SELECT * FROM tblEmployees WHERE id = ?", [10]);
             if (!selectedId) return;
             window.location.href = "detail?type=employee&id=" + selectedId;
         });
-
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(menu) {
-            const icon = menu.querySelector(".submenu-icon");
-            const target = document.querySelector(menu.getAttribute("href"));
-            if (!icon || !target) return;
-            target.addEventListener("show.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-left");
-                icon.classList.add("bi-chevron-down");
-            });
-            target.addEventListener("hide.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-down");
-                icon.classList.add("bi-chevron-left");
-            });
-        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>

@@ -16,8 +16,7 @@ INSERT INTO tblRoles (role_name) VALUES
 ('Admin'),
 ('Accountant'),
 ('Teacher'),
-('Student')
-;
+('Student');
 
 INSERT INTO tblPermissions (permission_name) VALUES
 ('create'),
@@ -51,6 +50,14 @@ VALUES
 ('Reading', 20),
 ('Grammar', 20),
 ('Writing', 20);
+
+INSERT INTO tblExamTypes (exam_type_name) VALUES
+('Test'),
+('Monthly'),
+('Midterm'),
+('Final'),
+('Certificate'),
+('Scholarship');
 
 
 

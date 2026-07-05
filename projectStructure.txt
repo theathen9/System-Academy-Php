@@ -1,20 +1,106 @@
 System-Academy/ 
+│── app/ 
+        │── api/v1/
+            │── auth.php
+            │── users.php
+            │── register_process.php
+            │── generate_invoice.php
+            │── dashboard.php
+            │── address.php
+        │── Services/
+            │── InvoicePdfService.php
+│── config/ 
+        │── app.php
+        │── bootstrap.php
+        │── db.php
+│── core/ 
+        │── Cache.php
+        │── DB.php
+        │── Logger.php
+        │── ORM.php
+        │── QueryBuilder.php
+│── helpers/ 
+        │── csrf.php
+        │── request.php
+        │── response.php
+        │── upload.php
+        │── validation.php
+│── components/ 
+        │── Avatar.php
+        │── Navbar.php
+        │── RegisterStaff.php
+        │── RegisterStudent.php
 │── admin/ 
+        │── account/
+            │── setting.php
+        │── attendance/
+            │── student/
+                │── approved.php
+            │── dashboard.php
+        │── enrollment/
+            │── add.php
+            │── dashboard.php
+        │── examination/
+            │── add.php
+            │── result.php                 
         │── institute/
             │── department.php
             │── employees.php
-            │── teacher.php
-            │── student.php 
-        │── Attendance/ 
-            │── Attendance/
-        │── billing/ 
-            │── payment.php 
-        │── admin/ 
-│── config/
-    │── db.php 
-│── teacher/
-│── student/
-│── auth/
+            │── teacher.php 
+            │── edit.php
+            │── detial.php         
+        │── sis/
+            │── courses.php
+            │── student.php
+            │── edit.php
+            │── detial.php 
+        │── report/
+            │── index.php         
+        │── dashboard.php
+        │── register.php 
+│── account/ 
+        │── account/
+            │── setting.php
+        │── attendance/
+            │── student/
+                │── approved.php
+            │── dashboard.php
+        │── enrollment/
+            │── add.php
+            │── dashboard.php
+        │── examination/
+            │── add.php
+            │── result.php                 
+        │── institute/
+            │── department.php
+            │── employees.php
+            │── teacher.php 
+            │── edit.php
+            │── detial.php         
+        │── sis/
+            │── courses.php
+            │── student.php
+            │── edit.php
+            │── detial.php 
+        │── schedule/
+            │── index.php
+        │── report/
+            │── index.php         
+        │── dashboard.php
+        │── register.php 
+│── stotage/ 
+        │── cache/
+        │── logs/
+│── uploads/ 
+        │── photos/
+│── data/ 
+        │── addressCambodia.json
+        │── dataSchema.php
+│── vendor/
+│── Dockerfile       
+│── gitignore       
+│── composer.json       
+│── composer.lock       
 │── .env
-│── .htaccess        ← ROOT (this file #1)
+│── .htaccess    ← ROOT (this file #1)
 │── index.php    ← ENTRY POINT

@@ -15,6 +15,7 @@
     // include_once __DIR__ . '/api/dashboard.php';
     include_once __DIR__ . '/../config/bootstrap.php';
     include_once __DIR__ . '/../components/Navbar.php';
+    include_once __DIR__ . '/../components/Avatar.php';
 
 
 
@@ -111,88 +112,117 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
             integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="../../../src/style.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+        <script src="../src/assets/js/user-profile.js" defer></script>
+        <link rel="stylesheet" href="../src/style.css">
 
 
         <style>
-            .dataLoading.loading {
-                opacity: 0.6;
-                pointer-events: none;
+            .page-title {
+                font-weight: 700;
             }
 
-            .tag-box {
-                display: flex;
-                flex-wrap: wrap;
-                border: 1px solid #ccc;
-                padding: 5px;
-                border-radius: 6px;
+            /* .title {
+                font-weight: 600;
+            } */
+
+            .card-report {
+                border: none;
+                border-radius: 16px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, .05);
+                transition: .3s;
             }
 
-            .tag {
-                background: #e3f2fd;
-                margin: 3px;
-                padding: 5px 10px;
-                border-radius: 20px;
+            .card-report:hover {
+                transform: translateY(-5px);
+            }
+
+            .card-icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 12px;
                 display: flex;
                 align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                color: white;
             }
 
-            .tag span {
-                margin-left: 8px;
+            .students {
+                background: #3B82F6;
+            }
+
+            .enrollments {
+                background: #8B5CF6;
+            }
+
+            .revenue {
+                background: #10B981;
+            }
+
+            .attendance {
+                background: #F59E0B;
+            }
+
+            .quick-report {
                 cursor: pointer;
-                color: red;
+                transition: .3s;
             }
 
-            .sidebar a {
-                display: block;
-                padding: 12px 20px;
-                color: #333;
-                text-decoration: none;
+            .quick-report:hover {
+                background: #f8f9fa;
             }
 
-            .sidebar a:hover {
-                background: #0d6efd;
-                color: white;
-                border-radius: 6px;
+            .chart-container {
+                height: 350px;
             }
 
-            .content {
-                margin-left: 240px;
-                padding: 20px;
+            .card-report {
+                border: none;
+                border-radius: 16px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, .05);
+                transition: .3s;
             }
 
-            .card-box {
+            .card-report:hover {
+                transform: translateY(-5px);
+            }
+
+            .card-icon {
+                width: 55px;
+                height: 55px;
                 border-radius: 12px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            }
-
-            .stat-icon {
-                font-size: 28px;
-                padding: 15px;
-                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
                 color: white;
             }
 
+            /* FIX colors (you were using bg-green etc but not defined properly) */
             .bg-blue {
-                background: #0d6efd;
+                background: #3B82F6;
             }
 
             .bg-green {
-                background: #28a745;
-            }
-
-            .bg-orange {
-                background: #f39c12;
+                background: #10B981;
             }
 
             .bg-red {
-                background: #e74c3c;
+                background: #EF4444;
+            }
+
+            .bg-purple {
+                background: #8B5CF6;
+            }
+
+            .page-title {
+                font-weight: 700;
             }
         </style>
 
@@ -209,34 +239,18 @@
                     class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
                     <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                    <div class="dropdown">
-                        <!-- <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
-                            <div>Username</div>
-                        </button> -->
+                    <?php Avatar($_SESSION['role']); ?>
 
-                        <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                            <div id="username"></div>
-                        </button>
-
-                        <ul class="dropdown-menu bg-white ">
-                            <a href="../auth/signout.php" class="text-decoration-none">
-                                <li><button class="dropdown-item">Sign Out</button></li>
-                                <li><button class="dropdown-item">Account</button></li>
-                            </a>
-                        </ul>
-                    </div>
                 </div>
 
-                <div class="container-lg container-md container-sm p-3">
+                <div class="container-lg container-md container-sm p-3 ">
                     <div class="w-100 d-flex justify-content-between flex-wrap h-25">
                         <div class="d-flex gap-2 w-100">
                             <form method="GET" id="filterForm" class="d-flex justify-content-around w-100" autocomplete="off">
                                 <div class="d-flex w-100">
 
                                     <div class="me-2">
-                                        <h3 class="text-break">Analytics</h3>
+                                        <h3 class="text-break page-title">Analytics</h3>
                                     </div>
                                     <div class="d-flex w-75">
 
@@ -337,9 +351,8 @@
                                                     Enrollments
                                                 </label>
                                             </div>
-
-
                                         </div>
+
                                     </div>
                                     <div>
                                         <button style="width: 135px;" type="button" class="btn btn-success ms-3 h-auto">
@@ -359,7 +372,7 @@
                 </div>
 
                 <div class="w-100 d-flex mt-3 ms-3 justify-content-between gap-3 flex-wrap dataLoading">
-                    <div class="w-100 bg-white shadow px-4 py-3 rounded">
+                    <div class="w-100 rounded">
                         <div class="row g-4">
                             <div class="row g-4">
                                 <?php
@@ -386,7 +399,7 @@
                                 $revenueCard = $conn->query($getRevenueCard)->fetch_assoc()['total'];
 
                                 $cards = [
-                                    ["Total Revenue", "totalRevenueCard", "fa-dollar-sign", "bg-green", "$" . ($revenueCard)],
+                                    ["Total Revenue", "totalRevenueCard", "fa-dollar-sign", "bg-green", "$" . number_format($revenueCard, 2)],
                                     ["Total Students", "totalStudentCard", "fa-graduation-cap", "bg-blue", $studentCard],
                                     ["Total Teachers", "totalTeacherCard", "fa-users", "bg-green", $teacherCard],
                                     ["Total Classes", "classCard", "fa-school", "bg-red", $classCard], // hardcoded example
@@ -397,15 +410,20 @@
 
                                 <?php foreach ($cards as $c): ?>
                                     <div class="col-md-3">
-                                        <div class="card card-box">
+                                        <div class="card card-report">
                                             <div class="card-body d-flex justify-content-between align-items-center">
+
                                                 <div>
-                                                    <h9><?= htmlspecialchars($c[0]) ?></h9>
-                                                    <h2 id="<?= htmlspecialchars($c[1]) ?>"><?= htmlspecialchars($c[4]) ?></h2>
+                                                    <h6 class="mb-1"><?= htmlspecialchars($c[0]) ?></h6>
+                                                    <h3 class="mb-0" id="<?= htmlspecialchars($c[1]) ?>">
+                                                        <?= htmlspecialchars($c[4]) ?>
+                                                    </h3>
                                                 </div>
-                                                <div class="stat-icon <?= htmlspecialchars($c[3]) ?>">
+
+                                                <div class="card-icon <?= htmlspecialchars($c[3]) ?>">
                                                     <i class="fa <?= htmlspecialchars($c[2]) ?>"></i>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -520,7 +538,9 @@
                     </div>
             </main>
         </div>
-        <script src="../../script.js"></script>
+        <script src="../src/assets/js/script.js"></script>
+        <script src="../src/assets/js/navbar-toggle-action.js"></script>
+
 
         <script>
             let startDate = "<?= $startDate ?>";
@@ -528,25 +548,6 @@
             let selectYear = "<?= $selectedYear ?>";
             let selectClass = "<?= $selectedClass ?>";
             let selectTeacher = "<?= $selectTeacher  ?>";
-
-
-            fetch("http://localhost/system-management/api/v1/users.php", {
-                    credentials: "include"
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        document.querySelector("#username").innerText = data.data.username;
-
-                        const profileImg = data.data.profile_image ?
-                            "/system-management/uploads/photos/" + data.data.profile_image :
-                            "/system-management/src/assets/default-user.png";
-
-                        document.querySelector("#profileImg").src = profileImg;
-                    } else {
-                        console.log("Failed:", data);
-                    }
-                });
 
             // ----------------------
             // Flatpickr Setup
@@ -672,7 +673,7 @@
                     }
                 });
                 attendanceChart = new Chart(document.getElementById('attenChart'), {
-                    type: 'line', // changed from 'bar' to 'line'
+                    type: 'bar', // changed from 'bar' to 'line'
                     data: {
                         labels: [], // x-axis labels (dates)
                         datasets: [{
@@ -847,7 +848,7 @@
             function updateUI(data) {
                 document.getElementById('totalStudentCard').innerText = data.studentCard ?? 0;
                 document.getElementById('totalTeacherCard').innerText = data.teacherCard ?? 0;
-                document.getElementById('totalRevenueCard').innerText = '$' + (data.revenueCard ?? 0);
+                document.getElementById('totalRevenueCard').innerText = '$' + Number(data.revenueCard ?? 0).toFixed(2);
 
                 // Enrollment chart
                 enrollChart.data.labels = data.enrollChart?.labels ?? [];
@@ -1029,9 +1030,7 @@
                 timer = setTimeout(loadDashboard, 300);
             }
 
-            // document.querySelectorAll('#startDate, #endDate, #selectTeacher, #selectClass, .status-filter')
-            //     .forEach(el => el.addEventListener('change', debounceLoad));
-            document.querySelectorAll('#startDate, #endDate, .status-filter')
+            document.querySelectorAll('#startDate, #endDate, #selectTeacher, #selectClass, .status-filter')
                 .forEach(el => el.addEventListener('change', debounceLoad));
 
             // ----------------------
@@ -1077,11 +1076,11 @@
                 await loadClasses(selectTeacher);
                 loadDashboard();
 
-                // Auto refresh every 5 seconds
+                // Auto refresh every 15 seconds
                 setInterval(async () => {
                     console.log("Refreshing dashboard...", new Date());
                     await loadDashboard();
-                }, 9000);
+                }, 15000);
             });
         </script>
 

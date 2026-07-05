@@ -2,7 +2,7 @@
 // ./auth/signin.php (from Page)
 date_default_timezone_set('Asia/Phnom_Penh');
 include_once __DIR__ . '/../config/bootstrap.php';
-include_once __DIR__ . '/../auth/auth.php';
+// include_once __DIR__ . '/../app/api/v1/auth.php';
 $user = checkAuth();
 if ($user && isset($_SESSION['loggedin'])) {
     switch (strtolower($_SESSION['role'])) {
@@ -75,13 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["reference_type"] = $row["reference_type"];
                 // $_SESSION['last_auth_check'] = time();
                 $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-                setcookie("access_token", $accessToken, [
-                    'expires' => strtotime($accessExpiry),
-                    'path' => '/',
-                    'secure' => $secure,
-                    'httponly' => true,
-                    'samesite' => 'Lax'
-                ]);
+
+             
                 $userId = $_SESSION["user_id"];
                 $signature = hash_hmac('sha256', $userId, APP_SECRET);
                 $value = $userId . "." . $signature;
@@ -89,6 +84,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     'expires' => strtotime($refreshExpiry),
                     'path' => '/',
                     'secure' => $secure, // ✅ FIX
+                    'httponly' => true,
+                    'samesite' => 'Lax'
+                ]);
+                   setcookie("access_token", $accessToken, [
+                    'expires' => strtotime($accessExpiry),
+                    'path' => '/',
+                    'secure' => $secure,
                     'httponly' => true,
                     'samesite' => 'Lax'
                 ]);

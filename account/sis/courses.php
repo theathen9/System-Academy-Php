@@ -5,31 +5,27 @@ session_start();
 include_once __DIR__ . '/../../config/bootstrap.php';
 include_once __DIR__ . '/../../data/dataSchema.php';
 include_once __DIR__ . '/../../components/Navbar.php';
+include_once __DIR__ . '/../../components/Avatar.php';
 
 
 // echo '<pre>';
 // print_r($_POST);
 // exit;
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
+
+$db = new DB($conn);
+$courseCRUD = new ORM($db, "tblCourses", "course_id");
+$cache = new Cache();
 
 $userId = checkAuth();
 if (!$userId) {
     header("Location: ../auth/signin.php");
     exit;
 }
-authorizeRole('accountant');
+authorizeRole('admin');
 
-$routeAccount[0]["active"] = false;
-$routeAccount[2]["active"] = true;
-$routeAccount[2]['submenu'][2]['active'] = true;
-
-$db = new DB($conn);
-$courseCRUD = new ORM($db, "tblCourses", "course_id");
-$cache = new Cache();
-
-
+$routeAdmin[0]["active"] = false;
+$routeAdmin[2]["active"] = true;
+$routeAdmin[2]['submenu'][1]['active'] = true;
 
 
 $limit = 18;
@@ -109,7 +105,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $courseCRUD->delete($id);
 
+                $cache->clearByPrefix("courses_list_");
+                $countCacheKey = "course_count_{$search}";
+
                 $_SESSION['success'] = "Course deleted successfully!";
+
                 break;
 
 
@@ -120,8 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $course_code     = trim($_POST['course_code'] ?? '');
                 $course_name     = trim($_POST['course_name'] ?? '');
-                $course_price    = trim($_POST['price'] ?? '');
-                $course_duration = trim($_POST['duration'] ?? '');
+                $course_price    = trim($_POST['course_price'] ?? '');
+                $course_duration = trim($_POST['course_duration'] ?? '');
 
                 if ($course_code === '' || $course_name === '') {
                     throw new Exception('Course code and name are required');
@@ -131,13 +131,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'course_code'     => $course_code,
                     'course_name'     => $course_name,
                     'price'    => $course_price,
-                    'duration' => $course_duration,
-                    'created_at'      => date('Y-m-d H:i:s')
+                    'duration' => $course_duration
+                    // 'created_at'      => date('Y-m-d H:i:s')
                 ];
 
                 $courseCRUD->insert($data);
 
                 $_SESSION['success'] = "Course added successfully!";
+                $cache->clearByPrefix("courses_list_");
                 break;
 
 
@@ -154,8 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $course_code     = trim($_POST['course_code'] ?? '');
                 $course_name     = trim($_POST['course_name'] ?? '');
-                $course_price    = trim($_POST['price'] ?? '');
-                $course_duration = trim($_POST['duration'] ?? '');
+                $course_price    = trim($_POST['course_price'] ?? '');
+                $course_duration = trim($_POST['course_duration'] ?? '');
 
                 if ($course_code === '' || $course_name === '') {
                     throw new Exception('Course code and name are required');
@@ -165,13 +166,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'course_code'     => $course_code,
                     'course_name'     => $course_name,
                     'price'    => $course_price,
-                    'duration' => $course_duration,
-                    'updated_at'      => date('Y-m-d H:i:s')
+                    'duration' => $course_duration
+                    // 'updated_at'      => date('Y-m-d H:i:s')
                 ];
 
-                $courseCRUD->update($id, $data);
+                $courseCRUD->where("course_id", "=", $id)->update($data);
 
                 $_SESSION['success'] = "Course updated successfully!";
+                $cache->clearByPrefix("courses_list_");
+
                 break;
 
 
@@ -186,14 +189,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
-
-
-
-
-
-
-
-
 
 ?>
 <!DOCTYPE html>
@@ -215,39 +210,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../src/style.css">
+    <script src="/system-management/src/assets/js/user-profile.js"></script>
+    <style>
+        .page-title {
+            font-weight: 700;
+        }
+    </style>
 
 </head>
 
 <body class="container-fluid p-0 overflow-x-hidden">
     <div class="row g-3">
 
-        <?php Navbar($infoSchemaData, $routeAccount); ?>
+        <?php Navbar($infoSchemaData, $routeAdmin); ?>
 
 
         <!-- Main area -->
         <main class="col-lg-10 col-sm-12 bg-light">
             <div
                 class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
+
                 <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                <div class="dropdown">
-                    <!-- <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
-                            <div>Username</div>
-                        </button> -->
+                <?php Avatar($_SESSION['role']); ?>
 
-                    <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                        <div id="username"></div>
-                    </button>
-
-                    <ul class="dropdown-menu bg-white ">
-                        <a href="../auth/signout.php" class="text-decoration-none">
-                            <li><button class="dropdown-item">Sign Out</button></li>
-                            <li><button class="dropdown-item">Account</button></li>
-                        </a>
-                    </ul>
-                </div>
             </div>
 
             <div class="w-100 d-flex mt-3 ms-3 justify-content-between gap-3 flex-wrap m-0">
@@ -313,10 +299,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <input type="text" class="form-control" name="course_duration" id="edit_course_duration" required>
                                             </div>
 
-                                            <div class="mb-3">
-                                                <label class="form-label">Date Update</label>
-                                                <input type="date" class="form-control" name="updated_at" id="edit_updated_at" required>
-                                            </div>
+
                                         </div>
 
                                         <div class="modal-footer">
@@ -494,24 +477,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="../../script.js"></script>
 
+    <script src="<?= BASE_URL ?>/src/assets/js/navbar-toggle-action.js"></script>
+
     <script>
-        fetch("http://localhost/system-management/api/v1/users.php", {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector("#username").innerText = data.data.username;
-
-                    document.querySelector("#profileImg").src =
-                        "http://localhost/system-management/uploads/photos/" +
-                        data.data.profile_image;
-                } else {
-                    console.log("Failed:", data);
-                }
-            });
-
-
         let selectedRow = null;
         let selectedId = null;
 
@@ -553,7 +521,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.getElementById("edit_course_name").value = selectedRow.dataset.name;
             document.getElementById("edit_course_price").value = selectedRow.dataset.price;
             document.getElementById("edit_course_duration").value = selectedRow.dataset.duration;
-            document.getElementById("edit_created_at").value = selectedRow.dataset.created;
         });
 
         // ================= DELETE =================
@@ -567,29 +534,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          <strong>${selectedRow.dataset.name}</strong> Course?`;
         });
     </script>
-    <script>
-        document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(menu) {
-
-            const icon = menu.querySelector(".submenu-icon");
-            const target = document.querySelector(menu.getAttribute("href"));
-
-            if (!icon || !target) return;
-
-            target.addEventListener("show.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-left");
-                icon.classList.add("bi-chevron-down");
-            });
-
-            target.addEventListener("hide.bs.collapse", function() {
-                icon.classList.remove("bi-chevron-down");
-                icon.classList.add("bi-chevron-left");
-            });
-
-        });
-    </script>
-
-
-
 </body>
 
 </html>

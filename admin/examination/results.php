@@ -9,6 +9,7 @@
     include_once __DIR__ . '/../../config/bootstrap.php';
     include_once __DIR__ . "/../../data/dataSchema.php";
     include_once __DIR__ . "/../../components/Navbar.php";
+    include_once __DIR__ . "/../../components/Avatar.php";
 
 
 
@@ -39,14 +40,17 @@
     $teacherCRUD = new ORM($db, 'tblEmployees t', 'employee_id');
     $ClassesCRUD = new ORM($db, 'tblClasses', 'class_id');
     $StudentsCRUD = new ORM($db, 'tblStudents s', 'student_id');
+    $examTypeCRUD = new ORM($db, 'tblExamTypes', 'exam_type_id');
+    $examCRUD = new ORM($db, 'tblExams em', 'exam_id');
     $ScoresCRUD = new ORM($db, 'tblScores sc', 'score_id');
     $scoreTypesCRUD = new ORM($db, 'tblScoreTypes', 'score_type_id');
     $resultStudentCRUD = new ORM($db, 'tblStudentResults r', 'result_id');
 
     $selectedTeacher = $_GET['teacher'] ?? '';
-    $selectedClass   = $_GET['class'] ?? '';
+    $selectedClass = $_GET['class'] ?? '';
     $academicYear    = $_GET['academic_year'] ?? '';
-    $selectedExamType = $_GET['exam_type'] ?? '';
+    $selectedExamTypeId = $_GET['exam_type_id'] ?? '';
+    $selectedExamDate = $_GET['exam_date'] ?? '';
 
     $years = $conn->query("
     SELECT DISTINCT academic_year
@@ -86,6 +90,8 @@
     }
 
     $studentsScores = $studentsScores->get();
+    $examTypes = $examTypeCRUD->select("*")->get();
+
 
     $scoreMap = [];
 
@@ -129,15 +135,9 @@
 
     if ($selectedClass && $academicYear) {
 
-        $results = $resultStudentCRUD
+        $query = $resultStudentCRUD
             ->select("
-            r.result_id,
-            r.enrollment_id,
-            r.total_score,
-            r.average_score,
-            r.grade_id,
-            r.class_id,
-
+            r.*,
             s.student_id,
             CONCAT(s.first_name_kh, ' ', s.last_name_kh) AS student_name,
             c.class_name
@@ -145,8 +145,18 @@
             ->join("tblEnrollments e", "e.enrollment_id = r.enrollment_id")
             ->join("tblStudents s", "s.student_id = e.student_id")
             ->join("tblClasses c", "c.class_id = r.class_id")
-            ->where("r.class_id", "=", $selectedClass)
-            ->get();
+            ->join("tblExams ex", "ex.exam_id = r.exam_id")
+            ->where("r.class_id", "=", $selectedClass);
+
+        if (!empty($selectedExamDate)) {
+            $query->where("ex.exam_date", "=", $selectedExamDate);
+        }
+
+        if (!empty($selectedExamTypeId)) {
+            $query->where("ex.exam_type_id", "=", $selectedExamTypeId);
+        }
+
+        $results = $query->get();
     }
 
     $scores = $ScoresCRUD
@@ -180,6 +190,7 @@
             2 => 'B',
             3 => 'C',
             4 => 'D',
+            5 => 'E',
             default => 'F'
         };
     }
@@ -197,7 +208,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard | <?php echo $infoSchemaData[1]["name_short"] ?></title>
+        <title>Results | <?php echo $infoSchemaData[1]["name_short"] ?></title>
         <link rel="icon" type="image/png" href="<?php echo $infoSchemaData[5]["image"] ?>">
         <link rel="icon" type="image/png" href="<?php echo $infoSchemaData[5]["image"] ?>">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -216,6 +227,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+        <script src="/system-management/src/assets/js/user-profile.js"></script>
 
 
         <style>
@@ -307,24 +319,8 @@
                     class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
                     <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                    <div class="dropdown">
-                        <!-- <button class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img src="../src/assets/logo.jpg" width="60" height="60" style="border-radius:50%">
-                            <div>Username</div>
-                        </button> -->
+                    <?php Avatar($_SESSION['role']); ?>
 
-                        <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                            <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                            <div id="username"></div>
-                        </button>
-
-                        <ul class="dropdown-menu bg-white ">
-                            <a href="../auth/signout.php" class="text-decoration-none">
-                                <li><button class="dropdown-item">Sign Out</button></li>
-                                <li><button class="dropdown-item">Account</button></li>
-                            </a>
-                        </ul>
-                    </div>
                 </div>
 
 
@@ -352,7 +348,6 @@
                                         </div>
                                     </div>
                                     <form enctype="multipart/form-data" method="GET">
-
                                         <!-- Filter -->
                                         <div class="card shadow-sm border-0 mb-4">
                                             <div class="card-body">
@@ -403,14 +398,36 @@
                                                         </select>
                                                     </div>
 
+                                                    <div></div>
+
+
                                                     <div class="col-md-3">
                                                         <label class="form-label">Exam Type</label>
 
-                                                        <select name="exam_type" class="form-select" required>
+                                                        <select name="exam_type_id" class="form-select" required>
                                                             <option value="">Select Exam Type</option>
-                                                            <option value="midterm" <?= $selectedExamType == 'midterm' ? 'selected' : '' ?>>Midterm</option>
-                                                            <option value="final" <?= $selectedExamType == 'final' ? 'selected' : '' ?>>Final</option>
+
+                                                            <?php foreach ($examTypes as $items): ?>
+                                                                <option
+                                                                    value="<?= $items['exam_type_id'] ?>"
+                                                                    <?= $items['exam_type_id'] == $selectedExamTypeId ? 'selected' : '' ?>>
+                                                                    <?= htmlspecialchars($items['exam_type_name']) ?>
+                                                                </option>
+                                                            <?php endforeach; ?>
                                                         </select>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Exam Date</label>
+                                                        <input
+                                                            name="exam_date"
+                                                            value="<?= htmlspecialchars($selectedExamDate) ?>"
+                                                            type="text"
+                                                            id="exam_date"
+                                                            class="form-control"
+                                                            placeholder="dd/mm/yyyy"
+                                                            required
+                                                            class="form-control">
                                                     </div>
 
                                                     <div class="col-md-2 d-flex align-items-end">
@@ -425,7 +442,6 @@
                                             </div>
                                         </div>
                                     </form>
-
 
                                     <!-- Table -->
                                     <div class="card shadow-sm border-0">
@@ -537,8 +553,32 @@
                     </div>
             </main>
         </div>
+        
+        <script src="<?= BASE_URL ?>/src/assets/js/navbar-toggle-action.js"></script>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
 
+                flatpickr("#exam_date", {
+                    altFormat: "d-m-Y", // ✅ what user sees
+                    dateFormat: "Y-m-d", // ✅ value sent to backend
+                    altInput: true, // ✅ show separate input
+                    maxDate: "today",
+                    allowInput: true,
+                    monthSelectorType: "dropdown",
+                    yearSelectorType: "dropdown",
+
+                    onChange: function(selectedDates, dateStr) {
+                        document.getElementById("exam_date").value = dateStr;
+
+                        const hidden = document.getElementById("hidden_exam_date");
+                        if (hidden) {
+                            hidden.value = dateStr;
+                        }
+                    }
+                });
+            });
+        </script>
     </body>
 
     </html>

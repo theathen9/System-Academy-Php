@@ -14,12 +14,16 @@ if (session_status() === PHP_SESSION_NONE) {
 // include_once __DIR__ . '/../core/DB.php';
 // include_once __DIR__ . '/../../core/CRUD.php';
 // include_once __DIR__ . '/../core/ORM.php';
-include_once __DIR__ . '/../components/Navbar.php';
+
 include_once __DIR__ . '/../data/dbSchemaData.php';
 include_once __DIR__ . '/../data/functionData.php';
-include_once __DIR__ . '/../data/register_staff.php';
-include_once __DIR__ . '/../data/register_student.php';
 include_once __DIR__ . '/../config/bootstrap.php';
+include_once __DIR__ . '/../components/Navbar.php';
+include_once __DIR__ . '/../components/Avatar.php';
+include_once __DIR__ . '/../components/RegisterStaff.php';
+include_once __DIR__ . '/../components/RegisterStudent.php';
+// include_once __DIR__ . '/../data/register_student.php';
+// include_once __DIR__ . '/../data/register_staff.php';
 
 
 // include_once __DIR__ . '/api/dashboard.php';
@@ -38,6 +42,7 @@ if (!$userId) {
 }
 
 authorizeRole('accountant');
+
 
 // var_dump($_SESSION);
 // var_dump($_COOKIE);
@@ -59,10 +64,12 @@ $step = $_POST['step'] ?? null;
 
 $db = new DB($conn);
 $studentCRUD = new ORM($db, "tblStudents", "student_id");
-$classCRUD = new ORM($db, "tblClasses", "class_id");
 $teacherCRUD = new ORM($db, "tblEmployees", "employee_id");
+$employeeCRUD = new ORM($db, "tblEmployees", "employee_id");
+$classCRUD = new ORM($db, "tblClasses", "class_id");
 $courseCRUD = new ORM($db, "tblCourses", "course_id");
 $subjectCRUD = new ORM($db, "tblSubjects", "subject_id");
+$courseSubjectCRUD = new ORM($db, "tblCourseSubjects", "id");
 $roomCRUD = new ORM($db, "tblRooms", "room_id");
 $timeSlotCRUD = new ORM($db, "tblTimeSlots", "slot_id");
 $timetablCRUD = new ORM($db, "tblTimetables tt", "timetable_id");
@@ -81,8 +88,13 @@ $res = $studentCRUD
 $lastId = $res['student_id'] ?? 0;
 $idCode = $lastId + 1;
 
+$resS = $employeeCRUD
+    ->select('employee_id')
+    ->orderBy('employee_id', 'DESC')
+    ->first();
 
-
+$lastIdS = $resS['employee_id'] ?? 0;
+$idCodeStaff = $lastIdS + 1;
 
 
 
@@ -124,12 +136,19 @@ if (is_array($getClass)) {
         $teacher = $teacherCRUD->find($classRow['teacher_id']);
         $room = $roomCRUD->find($classRow['room_id']);
         $timeSlot = $timeSlotCRUD->find($classRow['slot_id']);
-        $courseSubjectId = $classRow['course_subject_id'] ?? null;
+        $courseSubject = $courseSubjectCRUD->find($classRow['course_subject_id']);
 
-        $courseSubject = $courseSubjectId
-            ? (new ORM($db, "tblCourseSubjects", "id"))->find($courseSubjectId)
-            : null;
-            
+        $course = null;
+        $subject = null;
+        $level = null;
+
+        if ($courseSubject) {
+
+            $course = $courseCRUD->find($courseSubject['course_id']);
+
+            $subject = $subjectCRUD->find($courseSubject['subject_id']);
+        }
+
         // ✅ FIX timetable query (no subject join needed)
         $timetables = (new ORM($db, "tblTimetables tt"))
             ->select("d.day_code")
@@ -143,7 +162,7 @@ if (is_array($getClass)) {
         // ------------------------
 
         $classRow['class_name'] = $classRow['class_name'] ?? '';
-        $classRow['subject_code'] = $subject['subject_code'] ?? '';
+        $classRow['subject_code'] = $subject['subject_code'] ?? ''; // ✅ correct
         $classRow['course_name'] = $course['course_name'] ?? '';
         $classRow['price'] = $course['price'] ?? 0;
 
@@ -201,11 +220,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../src/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="../src/assets/js/user-profile.js" defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         .progress-bar {
             transition: width 0.4s ease;
+        }
+
+        .page-title {
+            font-weight: 700;
         }
     </style>
 
@@ -223,19 +247,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 class="d-flex justify-content-between align-items-center px-2 py-2 bg-white position-sticky top-0 z-3">
                 <div class="title">Welcome to <?php echo $infoSchemaData[0]["name"] ?></div>
 
-                <div class="dropdown">
-                    <button id="account" class="d-flex align-items-center border-0 bg-white gap-2" data-bs-toggle="dropdown">
-                        <img id="profileImg" width="60" height="60" style="border-radius:50%">
-                        <div id="username"></div>
-                    </button>
+                <?php Avatar($_SESSION['role']); ?>
 
-                    <ul class="dropdown-menu bg-white">
-                        <a href=<?= BASE_URL . "/auth/signout.php" ?> class="text-decoration-none">
-                            <li><button class="dropdown-item">Sign Out</button></li>
-                            <li><button class="dropdown-item">Account</button></li>
-                        </a>
-                    </ul>
-                </div>
             </div>
 
             <!-- form -->
@@ -260,9 +273,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <form id="staffForm" method="post" enctype="multipart/form-data">
                                 <?= csrf_field(); ?>
 
-                                <input type="hidden" name="action" value="register_staff">
                                 <input type="hidden" name="created_by" value="<?= $_SESSION['reference_id'] ?? '' ?>">
-                                <?php register_staff($conn, $idCode); ?>
+                                <?php register_staff($conn, $idCodeStaff); ?>
                             </form>
                         </div>
 
@@ -291,23 +303,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </main>
     </div>
+    <script src="../src/assets/js/navbar-toggle-action.js"></script>
 
     <script>
-        fetch("http://localhost/system-management/api/v1/users.php", {
-                credentials: "include"
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector("#username").innerText = data.data.username;
-
-                    document.querySelector("#profileImg").src =
-                        "http://localhost/system-management/uploads/photos/" +
-                        data.data.profile_image;
-                } else {
-                    console.log("Failed:", data);
-                }
-            });
         document.getElementById("student_photo").addEventListener("change", function() {
 
             const file = this.files[0];
@@ -329,6 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         });
     </script>
+
     <script>
         const BASE_API = "/system-management/api/v1/address.php";
 
@@ -384,32 +383,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // events
         studentBtn.addEventListener("click", () => {
 
-            toggleSection(studentSection, staffSection, studentBtn, staffBtn);
+            type = "student";
+
+            console.log(type);
 
             const studentPrefixes = [
-                "student_dob_addr",
+                "student_birth_addr",
                 "student_curr_addr",
                 "student_guardian_curr_addr"
             ];
 
             studentPrefixes.forEach(setupAddressAPI);
 
+            toggleSection(studentSection, staffSection, studentBtn, staffBtn);
 
         });
 
         staffBtn.addEventListener("click", () => {
 
-            toggleSection(staffSection, studentSection, staffBtn, studentBtn);
+            type = "staff";
+
+
+            console.log(type);
+
             const staffPrefixes = [
                 "birth_addr",
                 "curr_addr"
             ];
 
             staffPrefixes.forEach(setupAddressAPI);
-        });
 
-        // default state
-        toggleSection(studentSection, staffSection, studentBtn, staffBtn);
+            toggleSection(staffSection, studentSection, staffBtn, studentBtn);
+
+        });
 
         function setupAddressAPI(prefix) {
 
@@ -606,29 +612,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             });
         }
+        let type = <?= json_encode($type) ?>;
 
         // INIT
         document.addEventListener("DOMContentLoaded", async function() {
 
-            const type = <?= json_encode($type) ?>;
             console.log(type);
 
-            const studentPrefixes = [
-                "student_birth_addr",
-                "student_curr_addr",
-                "student_guardian_curr_addr"
-            ];
-
-            const staffPrefixes = [
-                "birth_addr",
-                "curr_addr"
-            ];
-
-            if (type === "student") {
-                studentPrefixes.forEach(setupAddressAPI);
+            if (type === "staff") {
+                staffBtn.click(); // auto switch to staff form
             } else {
-                staffPrefixes.forEach(setupAddressAPI);
+                studentBtn.click(); // default student
             }
+
+
             flatpickr("#student_dob", {
                 altFormat: "d-m-Y", // ✅ what user sees
                 dateFormat: "Y-m-d", // ✅ value sent to backend
@@ -669,6 +666,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 monthSelectorType: "dropdown",
                 yearSelectorType: "dropdown",
             });
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const studentPrefixes = [
+                "student_birth_addr",
+                "student_curr_addr",
+                "student_guardian_curr_addr"
+            ];
+
+            const staffPrefixes = [
+                "birth_addr",
+                "curr_addr"
+            ];
+
+            studentPrefixes.forEach(setupAddressAPI);
+            staffPrefixes.forEach(setupAddressAPI);
+
         });
     </script>
 

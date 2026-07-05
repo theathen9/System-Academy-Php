@@ -1,257 +1,271 @@
 <?php
-// ./api/v1/login.php
+// ./app/api/v1/auth.php
+// header('Content-Type: application/json');
 
-session_start();
-
-header('Content-Type: application/json');
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include_once __DIR__ . '/../../../config/app.php';
 include_once __DIR__ . '/../../../config/db.php';
 
-/**
- * =========================================
- * JSON RESPONSE FUNCTION
- * =========================================
- */
-function jsonResponse($success, $message, $data = [], $status = 200)
+function checkAuth()
 {
-    http_response_code($status);
+    global $conn;
 
-    echo json_encode([
-        "success" => $success,
-        "message" => $message,
-        "data" => $data
+    // 1. SESSION 
+    if (
+        isset($_SESSION['loggedin']) &&
+        $_SESSION['loggedin'] === true &&
+        isset($_SESSION['last_auth_check']) &&
+        (time() - $_SESSION['last_auth_check']) < 300 // 5 min
+    ) {
+        return $_SESSION['user_id'];
+    }
+
+    // 2. COOKIE
+    $userId = verifyUserCookie();
+
+    if (!$userId) {
+        return false;
+    }
+
+    // 3. LOAD USER
+    session_regenerate_id(true);
+
+    $stmt = $conn->prepare("
+       SELECT 
+    u.user_id,
+    u.reference_id,
+    u.reference_type,
+    u.role_id,
+    r.role_name
+    FROM tblUsers u
+    JOIN tblRoles r ON r.role_id = u.role_id
+    WHERE u.user_id = ?
+    AND u.status = 1
+    LIMIT 1
+    ");
+
+    $stmt->bind_param("i", $userId);
+
+    if (!$stmt->execute()) {
+        return false; // ✅ FIX
+    }
+
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    if (!$user) {
+        return false; // ✅ FIX
+    }
+
+    // 4. SESSION
+    $_SESSION['loggedin'] = true;
+    $_SESSION['user_id'] = (int)$user['user_id'] ?? false;
+    $_SESSION['reference_id'] = (int)$user['reference_id'];
+    $_SESSION['reference_type'] = $user['reference_type'];
+    // $_SESSION['role_id'] = (int)$user['role_id'];
+    $_SESSION['role'] = $user['role_name'] ?? false;
+    $_SESSION['last_auth_check'] = time();
+
+    return (int)$user['user_id'];
+}
+
+
+
+
+function authorizeRole($roles = [])
+{
+    if (!is_array($roles)) {
+        $roles = [$roles];
+    }
+
+    $userRole = strtolower(trim($_SESSION['role'] ?? ''));
+
+    $roles = array_map(function ($role) {
+        return strtolower(trim($role));
+    }, $roles);
+
+    if (!$userRole || !in_array($userRole, $roles)) {
+
+        header("Location: " . BASE_URL . "/auth/signin.php");
+
+        exit();
+        // better than redirect loop
+        // http_response_code(403);
+
+        // exit("403 Forbidden - Access Denied");
+    }
+}
+
+/**
+ * Permission check
+ */
+function hasPermission($permission)
+{
+    return isset($_SESSION['permissions']) && in_array($permission, $_SESSION['permissions']);
+}
+
+
+function verifyUserCookie()
+{
+    global $conn;
+
+    // =========================
+    // 0. BASIC COOKIE CHECK
+    // =========================
+    if (empty($_COOKIE['c_user'])) {
+        return false;
+    }
+
+    $parts = explode('.', $_COOKIE['c_user']);
+    if (count($parts) !== 2) {
+        return false;
+    }
+
+    [$userId, $signature] = $parts;
+
+    if (!ctype_digit($userId)) {
+        return false;
+    }
+
+    $userId = (int)$userId;
+
+    // =========================
+    // 1. VERIFY SIGNATURE
+    // =========================
+    $expectedSignature = hash_hmac('sha256', $userId, APP_SECRET);
+
+    if (!hash_equals($expectedSignature, $signature)) {
+        return false;
+    }
+
+    // =========================
+    // 2. LOAD USER TOKENS
+    // =========================
+    $stmt = $conn->prepare("
+        SELECT access_token, access_expiry, refresh_token, refresh_expiry
+        FROM tblUsers
+        WHERE user_id = ?
+        LIMIT 1
+    ");
+
+    if (!$stmt) return false;
+
+    $stmt->bind_param("i", $userId);
+
+    if (!$stmt->execute()) return false;
+
+    $res = $stmt->get_result()->fetch_assoc();
+
+    if (!$res) return false;
+
+    $now = time();
+
+    // =========================
+    // 3. CHECK ACCESS TOKEN
+    // =========================
+
+    $accessValid = false;
+    $accessExpired = true;
+
+    if (!empty($_COOKIE['access_token'])) {
+
+        $hashedAccess = hash('sha256', $_COOKIE['access_token']);
+
+        $accessValid =
+            hash_equals($res['access_token'], $hashedAccess);
+
+        $accessExpired =
+            strtotime($res['access_expiry']) <= $now;
+    }
+
+    // CASE 1: access token still valid → allow
+    if ($accessValid && !$accessExpired) {
+        return $userId;
+    }
+
+    // =========================
+    // 4. VALID REFRESH TOKEN
+    // =========================
+    if (empty($_COOKIE['refresh_token'])) {
+        return false;
+    }
+
+    $hashedRefresh = hash('sha256', $_COOKIE['refresh_token']);
+
+    if (!hash_equals($res['refresh_token'], $hashedRefresh)) {
+        return false;
+    }
+
+    if (strtotime($res['refresh_expiry']) <= $now) {
+        return false;
+    }
+
+    // =========================
+    // 5. ROTATE TOKENS
+    // =========================
+    $newAccessToken  = bin2hex(random_bytes(32));
+    // $newRefreshToken = bin2hex(random_bytes(64));
+
+    $hashedAccessToken  = hash('sha256', $newAccessToken);
+    // $hashedRefreshToken = hash('sha256', $newRefreshToken);
+
+    $newAccessExpiry  = date('Y-m-d H:i:s', strtotime('+5 minutes'));
+    // $newRefreshExpiry = date('Y-m-d H:i:s', strtotime('+3 minutes'));
+    // $newRefreshExpiry = date('Y-m-d H:i:s', strtotime('+7 days'));
+
+    $update = $conn->prepare("
+        UPDATE tblUsers
+        SET access_token = ?, 
+            access_expiry = ?
+        WHERE user_id = ?
+    ");
+
+    if (!$update) return false;
+
+    $update->bind_param(
+        "ssi",
+        $hashedAccessToken,
+        $newAccessExpiry,
+        $userId
+    );
+
+    if (!$update->execute()) {
+        return false;
+    }
+
+    // =========================
+    // 6. SET NEW COOKIES
+    // =========================
+    $isSecure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+
+    $newSignature = hash_hmac('sha256', $userId, APP_SECRET);
+    $cookieValue = $userId . "." . $newSignature;
+
+    // $cookieOptions = [
+    //     'path' => '/',
+    //     'secure' => $isSecure,
+    //     'httponly' => true,
+    //     'samesite' => 'Lax' // safer for dev
+    // ];
+
+    setcookie("c_user", $cookieValue, [
+        'expires' => strtotime('+1 days'),
+        'path' => '/',
+        'secure' => $isSecure,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    setcookie("access_token", $newAccessToken, [
+        'expires' => strtotime($newAccessExpiry),
+        'path' => '/',
+        'secure' => $isSecure,
+        'httponly' => true,
+        'samesite' => 'Lax'
     ]);
 
-    exit;
+    return $userId;
 }
-
-/**
- * =========================================
- * ONLY POST METHOD
- * =========================================
- */
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    jsonResponse(false, "Method not allowed", [], 405);
-}
-
-/**
- * =========================================
- * GET JSON INPUT
- * =========================================
- */
-$input = json_decode(file_get_contents("php://input"), true);
-
-$email = trim($input['email'] ?? '');
-$password = trim($input['password'] ?? '');
-
-/**
- * =========================================
- * VALIDATION
- * =========================================
- */
-if (empty($email) || empty($password)) {
-
-    jsonResponse(false, "Email and password are required", [], 422);
-}
-
-/**
- * =========================================
- * FIND USER
- * =========================================
- */
-$stmt = $conn->prepare("
-    SELECT
-        user_id,
-        reference_id,
-        reference_type,
-        role_id,
-        email,
-        password,
-        status
-    FROM tblUsers
-    WHERE email = ?
-    LIMIT 1
-");
-
-if (!$stmt) {
-    jsonResponse(false, "Database prepare failed", [], 500);
-}
-
-$stmt->bind_param("s", $email);
-
-if (!$stmt->execute()) {
-    jsonResponse(false, "Database execute failed", [], 500);
-}
-
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-$stmt->close();
-
-/**
- * =========================================
- * USER NOT FOUND
- * =========================================
- */
-if (!$user) {
-    jsonResponse(false, "Invalid credentials", [], 401);
-}
-
-/**
- * =========================================
- * ACCOUNT STATUS
- * =========================================
- */
-// if ($user['status'] !== 'active') {
-//     jsonResponse(false, "Account disabled", [], 403);
-// }
-
-/**
- * =========================================
- * VERIFY PASSWORD
- * =========================================
- */
-if (!password_verify($password, $user['password'])) {
-    jsonResponse(false, "Invalid credentials", [], 401);
-}
-
-/**
- * =========================================
- * GENERATE TOKENS
- * =========================================
- */
-$accessToken  = bin2hex(random_bytes(32));
-$refreshToken = bin2hex(random_bytes(64));
-
-$hashedAccessToken  = hash('sha256', $accessToken);
-$hashedRefreshToken = hash('sha256', $refreshToken);
-
-$accessExpiry  = date('Y-m-d H:i:s', strtotime('+15 minutes'));
-$refreshExpiry = date('Y-m-d H:i:s', strtotime('+7 days'));
-
-/**
- * =========================================
- * SAVE TOKENS
- * =========================================
- */
-$update = $conn->prepare("
-    UPDATE tblUsers
-    SET
-        access_token = ?,
-        access_expiry = ?,
-        refresh_token = ?,
-        refresh_expiry = ?,
-        last_login = NOW()
-    WHERE user_id = ?
-");
-
-if (!$update) {
-    jsonResponse(false, "Database update prepare failed", [], 500);
-}
-
-$update->bind_param(
-    "ssssi",
-    $hashedAccessToken,
-    $accessExpiry,
-    $hashedRefreshToken,
-    $refreshExpiry,
-    $user['user_id']
-);
-
-if (!$update->execute()) {
-    jsonResponse(false, "Failed to save tokens", [], 500);
-}
-
-$update->close();
-
-/**
- * =========================================
- * CREATE SESSION
- * =========================================
- */
-session_regenerate_id(true);
-
-$_SESSION['loggedin'] = true;
-$_SESSION['user_id'] = (int)$user['user_id'];
-$_SESSION['reference_id'] = (int)$user['reference_id'];
-$_SESSION['reference_type'] = $user['reference_type'];
-$_SESSION['role_id'] = (int)$user['role_id'];
-
-/**
- * =========================================
- * CREATE USER COOKIE
- * =========================================
- */
-$signature = hash_hmac(
-    'sha256',
-    $user['user_id'],
-    APP_SECRET
-);
-
-$cUser = $user['user_id'] . "." . $signature;
-
-/**
- * =========================================
- * COOKIE SETTINGS
- * =========================================
- */
-$isSecure = (
-    !empty($_SERVER['HTTPS']) &&
-    $_SERVER['HTTPS'] !== 'off'
-);
-
-$cookieOptions = [
-    'path' => '/',
-    'secure' => $isSecure,
-    'httponly' => true,
-    'samesite' => 'Lax'
-];
-
-/**
- * =========================================
- * SET COOKIES
- * =========================================
- */
-setcookie(
-    'c_user',
-    $cUser,
-    $cookieOptions + [
-        'expires' => strtotime($refreshExpiry)
-    ]
-);
-
-setcookie(
-    'access_token',
-    $accessToken,
-    $cookieOptions + [
-        'expires' => strtotime($accessExpiry)
-    ]
-);
-
-setcookie(
-    'refresh_token',
-    $refreshToken,
-    $cookieOptions + [
-        'expires' => strtotime($refreshExpiry)
-    ]
-);
-
-/**
- * =========================================
- * SUCCESS RESPONSE
- * =========================================
- */
-jsonResponse(
-    true,
-    "Login successful",
-    [
-        "user_id" => (int)$user['user_id'],
-        "role_id" => (int)$user['role_id'],
-        "reference_id" => (int)$user['reference_id'],
-        "reference_type" => $user['reference_type'],
-        "access_token" => $accessToken,
-        "refresh_token" => $refreshToken
-    ],
-    200
-);
+// var_dump($_COOKIE);
+// exit;

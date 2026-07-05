@@ -104,15 +104,12 @@ if ($action === 'register_staff') {
             'phone1' => post('phone1'),
             'phone2' => post('phone2', ''),
             'email' => strtolower(trim(post('email'))),
-            'profile_image' => $photo ?: 'default-user.png'
+            'profile_image' => $photo,
+            'status' => 'active'
         ];
 
         $id = $staffCRUD->insert($data);
 
-        $check = $staffCRUD->where('employee_id', '=', $id)->first();
-        if (empty($check->profile_image)) {
-            $staffCRUD->where('employee_id', '=', $id)->update(['profile_image' => 'default-user.png']);
-        }
         $platformData = [
             'employee_id'  => $id,
             'platform_type' => post('platform_type') ?? null,
