@@ -4,9 +4,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 // Database credentials (replace with your actual values)
-$servername = "localhost";   // Hosting mySQL
-$username   = "root";        // Your DB username
-$password   = "";            // Your DB password            
+$servername = "dpg-d953l9kvikkc73d87fo0-a";   // Hosting mySQL
+$username   = "systemacademy_user";        // Your DB username
+$password   = "nvO3JsebMJWRG0U0rJ3MU3oGNsPsy35J";            // Your DB password            
 $db         = "systemacademy";   // Your DB name
 // Create connection
 $conn = new mysqli($servername, $username, $password, $db);
