@@ -66,6 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        
+
         if ($row && password_verify($pass, $row["password"])) {
 
             session_regenerate_id(true);
